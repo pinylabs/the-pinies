@@ -1,0 +1,267 @@
+---
+// The preview home, from its accepted design. The full template is being built by the Pinies;
+// until then this page is the theme's home and the rest of the site is EmDash's own template.
+---
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>The Pinies — a studio that makes real sites</title>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link is:inline rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400..700&family=Nunito:wght@400..800&display=swap">
+<style is:global>
+/* The motion every site shares. Only transform and opacity move, so it stays on the compositor at 60 fps. Under
+   prefers-reduced-motion everything is still, and a browser without scroll timelines simply shows the page. */
+
+/* Page changes: the browser's cross-document view transition, as Astro's view transitions give it. A picture that
+   names itself the same on both pages grows into its place; the rest fades and slides. */
+@view-transition { navigation: auto; }
+::view-transition-old(root) { animation: 260ms cubic-bezier(.4, 0, 1, 1) both vt-out; }
+::view-transition-new(root) { animation: 420ms cubic-bezier(0, 0, .2, 1) 80ms both vt-in; }
+::view-transition-group(*) { animation-duration: 520ms; animation-timing-function: cubic-bezier(.2, .8, .2, 1); }
+@keyframes vt-out { to { opacity: 0; transform: translateY(-12px); } }
+@keyframes vt-in { from { opacity: 0; transform: translateY(24px); } }
+
+/* The hero's first moment: its words rise one line after another. */
+.rise { animation: rise .9s cubic-bezier(.2, .8, .2, 1) both; animation-delay: calc(var(--i, 0) * 110ms + 120ms); }
+@keyframes rise { from { opacity: 0; transform: translateY(36px); } }
+
+/* Scroll-driven: reveals move with `translate` and `scale`, so a card's hover `transform` still applies.
+   The hero's photo drifts slower than the page, and its words lift away. */
+@supports (animation-timeline: scroll()) {
+  .parallax { animation: parallax linear both; animation-timeline: scroll(root); animation-range: 0 100vh; }
+  .lift { animation: lift linear both; animation-timeline: scroll(root); animation-range: 0 70vh; }
+  .reveal { animation: reveal linear both; animation-timeline: view(); animation-range: entry 0% entry 70%; }
+  .reveal-side { animation: reveal-side linear both; animation-timeline: view(); animation-range: entry 0% entry 80%; }
+  .zoom-in { animation: zoom-in linear both; animation-timeline: view(); animation-range: entry 0% cover 50%; }
+}
+@keyframes parallax { from { transform: translateY(0) scale(1.08); } to { transform: translateY(22%) scale(1.16); } }
+@keyframes lift { to { opacity: 0; transform: translateY(-90px); } }
+@keyframes reveal { from { opacity: 0; translate: 0 70px; scale: .97; } }
+@keyframes reveal-side { from { opacity: 0; translate: -60px 0; } }
+@keyframes zoom-in { from { transform: scale(1.25); } }
+
+/* Hover, for a site that takes it: a card lifts and its photo leans in. Each site adds its own signature beside it. */
+.lift-card { transition: transform .45s cubic-bezier(.2, .8, .2, 1), box-shadow .45s; }
+.lift-card .pic img { transition: transform .9s cubic-bezier(.2, .8, .2, 1); }
+.lift-card:hover { transform: translateY(-8px); }
+.lift-card:hover .pic img { transform: scale(1.07); }
+.button { transition: transform .25s cubic-bezier(.2, .8, .2, 1), background-color .25s; }
+.button:hover { transform: translateY(-2px); }
+
+/* Calm: opacity only, for a site whose signature is stillness. */
+@supports (animation-timeline: view()) {
+  .fade { animation: fade linear both; animation-timeline: view(); animation-range: entry 0% entry 90%; }
+}
+@keyframes fade { from { opacity: 0; } }
+
+/* The Pinies' entrances, the public site's four, played once when their row comes into view. */
+.pinies[data-entrance] .face { animation-duration: .9s; animation-fill-mode: both; animation-delay: calc(var(--i) * .14s); animation-timing-function: cubic-bezier(.3, .7, .3, 1); }
+.pinies[data-entrance='walk'] .face { animation-name: walk; }
+.pinies[data-entrance='skid'] .face { animation-name: skid; }
+.pinies[data-entrance='drop'] .face { animation-name: drop; animation-timing-function: ease-in; }
+.pinies[data-entrance='peek'] .face { animation-name: peek; }
+.pinies[data-entrance='peek'] .face:last-child { animation-name: peek, wave; animation-duration: .9s, .6s; animation-delay: calc(4 * .14s), 1.5s; animation-fill-mode: both, none; }
+.pinies:not([data-entrance]):not([data-shown]) .face { opacity: 0; }
+@keyframes walk {
+  0% { transform: translateX(-120px); opacity: 0; } 12% { opacity: 1; }
+  20% { transform: translateX(-96px) translateY(-4px); } 35% { transform: translateX(-70px) translateY(0); }
+  50% { transform: translateX(-44px) translateY(-4px); } 65% { transform: translateX(-16px) translateY(0); }
+  80% { transform: translateX(0) translateY(-16px); } 100% { transform: translateX(0) translateY(0); }
+}
+@keyframes skid {
+  0% { transform: translateX(520px) rotate(0); opacity: 0; } 15% { opacity: 1; }
+  65% { transform: translateX(-8px) rotate(-12deg); } 82% { transform: translateX(3px) rotate(3deg); } 100% { transform: translateX(0) rotate(0); }
+}
+@keyframes drop {
+  0% { transform: translateY(-120px); opacity: 0; } 15% { opacity: 1; }
+  60% { transform: translateY(0); } 75% { transform: translateY(-12px); } 90% { transform: translateY(0); } 95% { transform: translateY(-3px); } 100% { transform: translateY(0); }
+}
+@keyframes peek { 0% { transform: translateY(56px); opacity: 0; } 20% { opacity: 1; } 70% { transform: translateY(-5px); } 100% { transform: translateY(0); } }
+@keyframes wave { 0%, 100% { transform: rotate(0); } 25% { transform: rotate(-12deg); } 50% { transform: rotate(10deg); } 75% { transform: rotate(-6deg); } }
+
+/* Still: reduced motion, and the stills this mock renders. */
+@media (prefers-reduced-motion: reduce) {
+  @view-transition { navigation: none; }
+  *, *::before, *::after { animation: none !important; transition: none !important; }
+  .pinies .face { opacity: 1 !important; }
+}
+html.still *, html.still *::before, html.still *::after { animation: none !important; transition: none !important; }
+html.still .pinies .face { opacity: 1 !important; }
+</style>
+<style is:global>
+:root {
+  --bg: #fff7ec; --ink: #17131f; --soft: #5e5768; --card: #ffffff; --line: #eadfce;
+  --sky1: #bfe8ef; --sky2: #ffe2b8; --sun: #ffb648; --hill1: #9fd6b9; --hill2: #5fb592; --hill3: #2f8a6f; --path: #f5d9a8;
+  --purple: #7d73d9; --coral: #ef7b62; --teal: #0a6f7b;
+  --display: 'Fredoka', system-ui, sans-serif; --sans: 'Nunito', system-ui, sans-serif;
+}
+@media (prefers-color-scheme: dark) {
+  :root { --bg: #120f1a; --ink: #f4effa; --soft: #aaa2b6; --card: #1c1826; --line: #2c2639;
+    --sky1: #1d1b3d; --sky2: #4a2d52; --sun: #ffd38a; --hill1: #2b4f53; --hill2: #1f3d40; --hill3: #142b2d; --path: #4a3d2c; --teal: #5cc8d4; }
+}
+* { box-sizing: border-box; margin: 0; }
+html { background: var(--bg); }
+body { background: var(--bg); color: var(--ink); font-family: var(--sans); -webkit-font-smoothing: antialiased; overflow-x: clip; }
+a { color: inherit; text-decoration: none; }
+.wrap { max-width: 1280px; margin: 0 auto; padding: 0 40px; }
+header { position: absolute; inset: 0 0 auto; z-index: 5; }
+header .wrap { display: flex; align-items: center; justify-content: space-between; height: 80px; }
+.mark { font-family: var(--display); font-weight: 700; font-size: 26px; letter-spacing: -.03em; }
+.mark i { font-style: normal; color: var(--coral); }
+nav { display: flex; gap: 28px; font-size: 15px; font-weight: 600; align-items: center; }
+nav .button { background: var(--ink); color: var(--bg); padding: 10px 18px; border-radius: 999px; }
+.scene { position: relative; height: 860px; overflow: hidden; background: linear-gradient(180deg, var(--sky1), var(--sky2) 70%); isolation: isolate; }
+.scene .sun { position: absolute; width: 260px; height: 260px; border-radius: 50%; background: var(--sun); right: 14%; top: 120px; box-shadow: 0 0 120px 40px color-mix(in srgb, var(--sun) 45%, transparent); }
+.scene .cloud { position: absolute; height: 46px; border-radius: 999px; background: rgba(255, 255, 255, .75); }
+.scene .cloud::before, .scene .cloud::after { content: ''; position: absolute; border-radius: 50%; background: inherit; }
+.scene .cloud::before { width: 60px; height: 60px; left: 22%; top: -28px; }
+.scene .cloud::after { width: 44px; height: 44px; left: 52%; top: -18px; }
+@media (prefers-color-scheme: dark) { .scene .cloud { background: rgba(255, 255, 255, .12); } }
+.c1 { width: 180px; left: 64%; top: 330px; animation: drift 38s linear infinite; }
+.c2 { width: 130px; left: 46%; top: 110px; animation: drift 52s linear infinite reverse; }
+@keyframes drift { 50% { transform: translateX(80px); } }
+.scene svg.hills { position: absolute; left: 0; width: 100%; height: auto; }
+.far { bottom: 230px; } .mid { bottom: 120px; } .near { bottom: -2px; }
+@supports (animation-timeline: scroll()) {
+  .far { animation: p-far linear both; animation-timeline: scroll(root); animation-range: 0 100vh; }
+  .mid { animation: p-mid linear both; animation-timeline: scroll(root); animation-range: 0 100vh; }
+  .sun { animation: p-sun linear both; animation-timeline: scroll(root); animation-range: 0 100vh; }
+}
+@keyframes p-far { to { transform: translateY(120px); } }
+@keyframes p-mid { to { transform: translateY(60px); } }
+@keyframes p-sun { to { transform: translateY(220px) scale(.9); } }
+.scene .words { position: absolute; left: 0; right: 0; top: 130px; }
+.scene h1 { font-family: var(--display); font-weight: 700; font-size: 100px; line-height: .9; letter-spacing: -.025em; max-width: 900px; }
+.scene h1 em { font-style: normal; color: var(--teal); }
+.scene p { font-size: 21px; line-height: 1.5; max-width: 520px; margin-top: 20px; color: var(--soft); }
+.scene .pinies { position: absolute; right: 7%; bottom: 70px; display: flex; gap: 14px; z-index: 2; }
+.pinies .face { width: 120px; height: 120px; position: relative; }
+.pinies .face svg { width: 100%; height: 100%; }
+.pinies .face small { position: absolute; left: 50%; bottom: -24px; transform: translateX(-50%); font-weight: 700; font-size: 13px; color: var(--ink); background: var(--card); border-radius: 999px; padding: 2px 9px; }
+.bubble { position: absolute; right: 9%; bottom: 230px; background: var(--card); color: var(--ink); border-radius: 22px; padding: 14px 18px; font-weight: 700; font-size: 17px; box-shadow: 0 14px 30px -18px rgba(0, 0, 0, .4); z-index: 2; animation: pop .6s cubic-bezier(.2, 1.6, .4, 1) 1.6s both; }
+.bubble::after { content: ''; position: absolute; left: 24px; bottom: -10px; border: 10px solid transparent; border-top-color: var(--card); border-bottom: 0; }
+@keyframes pop { from { opacity: 0; transform: scale(.6) translateY(20px); } }
+.work { padding: 96px 0 64px; }
+.work h2, .how h2 { font-family: var(--display); font-weight: 700; font-size: 76px; letter-spacing: -.02em; line-height: .95; }
+.work .intro { display: flex; justify-content: space-between; align-items: end; margin-bottom: 36px; gap: 40px; }
+.work .intro p { max-width: 420px; color: var(--soft); font-size: 18px; line-height: 1.5; }
+.grid { display: grid; grid-template-columns: 1fr 1fr; gap: 28px; }
+.card { background: var(--card); border-radius: 30px; overflow: hidden; border: 1px solid var(--line); transition: transform .5s cubic-bezier(.3, 1.6, .5, 1), box-shadow .4s; }
+.card:nth-child(odd):hover { transform: rotate(-2deg) translateY(-8px) scale(1.01); }
+.card:nth-child(even):hover { transform: rotate(2deg) translateY(-8px) scale(1.01); }
+.card .text { position: relative; border-top: 2px dashed var(--line); }
+.card .text::before, .card .text::after { content: ''; position: absolute; top: -14px; width: 26px; height: 26px; border-radius: 50%; background: var(--bg); }
+.card .text::before { left: -14px; } .card .text::after { right: -14px; }
+.card .stub { position: absolute; right: 24px; top: 22px; font-family: var(--display); font-weight: 600; font-size: 13px; letter-spacing: .12em; color: var(--coral); border: 2px solid var(--coral); border-radius: 8px; padding: 3px 8px; transform: rotate(4deg); }
+.scene .pinies .face, .how li .face { transition: transform .4s cubic-bezier(.3, 1.8, .5, 1); }
+.scene .pinies .face:hover, .how li:hover .face { transform: translateY(-14px) rotate(-6deg); }
+.how li { transition: transform .4s cubic-bezier(.3, 1.6, .5, 1); }
+.how li:hover { transform: rotate(-1deg); }
+.card:hover { box-shadow: 0 30px 70px -36px rgba(0, 0, 0, .45); }
+.card .pic { aspect-ratio: 16 / 10; overflow: hidden; border-bottom: 1px solid var(--line); }
+.card .pic img { width: 100%; height: 100%; object-fit: cover; object-position: top; display: block; }
+.card .text { padding: 22px 26px 26px; }
+.card .kind { font-weight: 700; font-size: 13px; text-transform: uppercase; letter-spacing: .08em; color: var(--teal); }
+.card h3 { font-family: var(--display); font-weight: 700; font-size: 40px; letter-spacing: -.015em; margin: 4px 0 8px; }
+.card p { color: var(--soft); font-size: 17px; line-height: 1.5; }
+.card .record { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 14px; }
+.card .record span { background: var(--bg); border: 1px solid var(--line); border-radius: 999px; padding: 6px 12px; font-size: 13px; font-weight: 600; }
+.how { padding: 32px 0 96px; }
+.how ol { list-style: none; padding: 0; display: grid; grid-template-columns: repeat(4, 1fr); gap: 20px; margin-top: 32px; }
+.how li { background: var(--card); border: 1px solid var(--line); border-radius: 26px; padding: 24px; }
+.how li .face { width: 72px; height: 72px; display: block; margin-bottom: 10px; }
+.how li .face svg { width: 100%; height: 100%; }
+.how li b { font-family: var(--display); font-size: 24px; letter-spacing: -.02em; }
+.how li p { color: var(--soft); font-size: 16px; line-height: 1.5; margin-top: 6px; }
+@media (max-width: 767px) {
+  .wrap { padding: 0 18px; }
+  nav a:not(.button) { display: none; }
+  .scene { height: 780px; }
+  .scene .sun { width: 150px; height: 150px; top: 90px; right: 6%; }
+  .scene .words { top: 110px; }
+  .scene h1 { font-size: 60px; }
+  .scene p { font-size: 17px; }
+  .scene .pinies { gap: 2px; bottom: 60px; right: 50%; transform: translateX(50%); }
+  .pinies .face { width: 68px; height: 68px; }
+  .pinies .face small { font-size: 11px; bottom: -18px; padding: 1px 6px; }
+  .bubble { left: auto; right: 18px; bottom: 170px; font-size: 15px; }
+  .work { padding: 56px 0 40px; }
+  .work h2, .how h2 { font-size: 48px; }
+  .work .intro { flex-direction: column; align-items: start; gap: 12px; }
+  .grid { grid-template-columns: 1fr; }
+  .card h3 { font-size: 32px; }
+  .how ol { grid-template-columns: 1fr; }
+}
+.still-card { height: 100%; display: grid; place-items: center; background: linear-gradient(135deg, var(--sky1, #bfe8ef), var(--sky2, #ffe2b8)); font-family: var(--display); font-weight: 700; font-size: 34px; color: var(--ink); }
+</style>
+</head>
+<body>
+<header><div class="wrap">
+  <a class="mark" href="/">the pinies<i>.</i></a>
+  <nav><a href="#">Work</a><a href="#">How we work</a><a href="#">The team</a><a class="button" href="#">Work with us in Piny</a></nav>
+</div></header>
+<section class="scene">
+  <div class="sun"></div><div class="cloud c1"></div><div class="cloud c2"></div>
+  <svg class="hills far" viewBox="0 0 1440 320" preserveAspectRatio="none"><path d="M0 200 C200 120 380 150 560 190 S900 90 1100 150 S1340 210 1440 170 V320 H0Z" fill="var(--hill1)"/></svg>
+  <svg class="hills mid" viewBox="0 0 1440 300" preserveAspectRatio="none"><path d="M0 170 C240 90 420 210 700 160 S1120 60 1440 150 V300 H0Z" fill="var(--hill2)"/></svg>
+  <svg class="hills near" viewBox="0 0 1440 240" preserveAspectRatio="none"><path d="M0 120 C300 40 560 140 820 90 S1240 30 1440 100 V240 H0Z" fill="var(--hill3)"/><path d="M640 240 C700 180 760 150 860 120" stroke="var(--path)" stroke-width="26" fill="none" stroke-linecap="round"/></svg>
+  <div class="wrap words lift">
+    <h1><span class="rise" style="--i:0;display:block">Five Pinies.</span><span class="rise" style="--i:1;display:block"><em>Real sites,</em> and</span><span class="rise" style="--i:2;display:block">how we made them.</span></h1>
+    <p class="rise" style="--i:3">A design and build team that lives in Piny. Every site here comes with its brief, who did what, the model we ran on, and what a person did by hand.</p>
+  </div>
+  <div class="pinies" data-play="walk"><span class="face"><svg xmlns="http://www.w3.org/2000/svg" viewBox="-62 -62 124 124" aria-hidden="true" focusable="false"><g><path d="M-12,33 L-13,50" stroke="#7D73D9" stroke-width="4.6" stroke-linecap="round"/><ellipse cx="-15" cy="52" rx="6.5" ry="3.8" fill="#26215C" stroke="#7D73D9" stroke-width="2"/><path d="M12,33 L13,50" stroke="#7D73D9" stroke-width="4.6" stroke-linecap="round"/><ellipse cx="15" cy="52" rx="6.5" ry="3.8" fill="#26215C" stroke="#7D73D9" stroke-width="2"/><path d="M-27.309516212355263,17 Q-39.30951621235526,22 -41.30951621235526,31" stroke="#7D73D9" stroke-width="4.6" fill="none" stroke-linecap="round"/><path d="M27.309516212355263,17 Q35.15475810617763,20 33,27" stroke="#7D73D9" stroke-width="4.6" fill="none" stroke-linecap="round"/><path data-piny-part="outline" d="M0,-41 A41,41 0 1 1 0,41 A41,41 0 1 1 0,-41 Z" fill="#AFA9EC" stroke="#7D73D9" stroke-width="3.2" stroke-linejoin="round"/><ellipse cx="-20" cy="11" rx="5" ry="3" fill="#F06F8B" opacity=".28"/><ellipse cx="20" cy="11" rx="5" ry="3" fill="#F06F8B" opacity=".28"/></g><g><ellipse cx="-13" cy="-7" rx="7.5" ry="7.50" fill="#fff"/><circle cx="-11.5" cy="-6" r="3.80" fill="#2C2C2A"/><circle cx="-10.2" cy="-7.6" r="1.2" fill="#fff"/><ellipse cx="13" cy="-7" rx="7.5" ry="7.50" fill="#fff"/><circle cx="14.5" cy="-6" r="3.80" fill="#2C2C2A"/><circle cx="15.8" cy="-7.6" r="1.2" fill="#fff"/></g><g><path d="M-8.00,13 Q0,18.00 8.00,13" stroke="#26215C" stroke-width="2.8" fill="none" stroke-linecap="round"/></g><g><g class="piny-prop piny-prop-roadmap"><g transform="translate(34,14) rotate(8)"><rect x="0" y="0" width="30" height="23" rx="3" fill="#F7F5EE" stroke="#5F5E5A" stroke-width="1.6"/><path d="M5,18 C10,18 9,9 15,10 C21,11 22,5 25,5" stroke="#534AB7" stroke-width="2" fill="none" stroke-linecap="round"/><circle cx="5" cy="18" r="2" fill="#534AB7"/><circle cx="25" cy="5" r="2.4" fill="#E2533F"/></g></g><circle cx="-41.30951621235526" cy="31" r="4.6" fill="#AFA9EC" stroke="#7D73D9" stroke-width="2"/><circle cx="33" cy="27" r="4.6" fill="#AFA9EC" stroke="#7D73D9" stroke-width="2"/></g></svg><small>Sam</small></span><span class="face"><svg xmlns="http://www.w3.org/2000/svg" viewBox="-62 -62 124 124" aria-hidden="true" focusable="false"><g><path d="M-12,33 L-13,50" stroke="#45B08D" stroke-width="4.6" stroke-linecap="round"/><ellipse cx="-15" cy="52" rx="6.5" ry="3.8" fill="#04342C" stroke="#45B08D" stroke-width="2"/><path d="M12,33 L13,50" stroke="#45B08D" stroke-width="4.6" stroke-linecap="round"/><ellipse cx="15" cy="52" rx="6.5" ry="3.8" fill="#04342C" stroke="#45B08D" stroke-width="2"/><path d="M-29,17 Q-41,22 -43,31" stroke="#45B08D" stroke-width="4.6" fill="none" stroke-linecap="round"/><path d="M29,17 Q42,21.5 45,30" stroke="#45B08D" stroke-width="4.6" fill="none" stroke-linecap="round"/><path data-piny-part="outline" d="M-39.0,-22.0 Q-39,-39 -22.0,-39.0 L22.0,-39.0 Q39,-39 39.0,-22.0 L39.0,22.0 Q39,39 22.0,39.0 L-22.0,39.0 Q-39,39 -39.0,22.0 Z" fill="#9FE1CB" stroke="#45B08D" stroke-width="3.2" stroke-linejoin="round"/><ellipse cx="-20" cy="11" rx="5" ry="3" fill="#F06F8B" opacity=".28"/><ellipse cx="20" cy="11" rx="5" ry="3" fill="#F06F8B" opacity=".28"/></g><g><ellipse cx="-13" cy="-7" rx="7.5" ry="7.50" fill="#fff"/><circle cx="-11.5" cy="-6" r="3.80" fill="#2C2C2A"/><circle cx="-10.2" cy="-7.6" r="1.2" fill="#fff"/><ellipse cx="13" cy="-7" rx="7.5" ry="7.50" fill="#fff"/><circle cx="14.5" cy="-6" r="3.80" fill="#2C2C2A"/><circle cx="15.8" cy="-7.6" r="1.2" fill="#fff"/></g><g><path d="M-8.00,13 Q0,18.00 8.00,13" stroke="#04342C" stroke-width="2.8" fill="none" stroke-linecap="round"/></g><g><g class="piny-prop piny-prop-stopwatch"><g transform="translate(46,16)"><rect x="-3" y="-15" width="6" height="5" rx="1" fill="#5F5E5A"/><circle cx="0" cy="0" r="12" fill="#F7F5EE" stroke="#5F5E5A" stroke-width="2"/><path d="M0,0 L0,-7 M0,0 L5,3" stroke="#0F6E56" stroke-width="2.2" stroke-linecap="round"/></g></g><circle cx="-43" cy="31" r="4.6" fill="#9FE1CB" stroke="#45B08D" stroke-width="2"/><circle cx="45" cy="30" r="4.6" fill="#9FE1CB" stroke="#45B08D" stroke-width="2"/></g></svg><small>Ana</small></span><span class="face"><svg xmlns="http://www.w3.org/2000/svg" viewBox="-62 -62 124 124" aria-hidden="true" focusable="false"><g><path d="M-18,34 Q-26,46 -32,51" stroke="#D5684A" stroke-width="4.6" fill="none" stroke-linecap="round"/><ellipse cx="-35" cy="53" rx="6.5" ry="3.8" fill="#4A1B0C" stroke="#D5684A" stroke-width="2"/><path d="M18,34 Q26,46 32,51" stroke="#D5684A" stroke-width="4.6" fill="none" stroke-linecap="round"/><ellipse cx="35" cy="53" rx="6.5" ry="3.8" fill="#4A1B0C" stroke="#D5684A" stroke-width="2"/><path d="M-31.125,27 Q-33.0625,37 -25,51" stroke="#D5684A" stroke-width="4.6" fill="none" stroke-linecap="round"/><path d="M31.125,27 Q33.0625,37 25,51" stroke="#D5684A" stroke-width="4.6" fill="none" stroke-linecap="round"/><path data-piny-part="outline" d="M-6.1,-38.5 Q0,-50 6.1,-38.5 L40.9,26.5 Q47,38 34.0,38.0 L-34.0,38.0 Q-47,38 -40.9,26.5 Z" fill="#F0997B" stroke="#D5684A" stroke-width="3.2" stroke-linejoin="round"/><ellipse cx="-18" cy="21" rx="5" ry="3" fill="#F06F8B" opacity=".28"/><ellipse cx="18" cy="21" rx="5" ry="3" fill="#F06F8B" opacity=".28"/></g><g><ellipse cx="-11" cy="7" rx="7.5" ry="7.50" fill="#fff"/><circle cx="-9.5" cy="8" r="3.80" fill="#2C2C2A"/><circle cx="-8.2" cy="6.4" r="1.2" fill="#fff"/><ellipse cx="11" cy="7" rx="7.5" ry="7.50" fill="#fff"/><circle cx="12.5" cy="8" r="3.80" fill="#2C2C2A"/><circle cx="13.8" cy="6.4" r="1.2" fill="#fff"/></g><g><path d="M-8.00,23 Q0,28.00 8.00,23" stroke="#4A1B0C" stroke-width="2.8" fill="none" stroke-linecap="round"/></g><g><g class="piny-prop piny-prop-laptop"><g transform="translate(0,44)"><rect x="-23" y="-14" width="46" height="23" rx="3" fill="#444441"/><path d="M-6,-8 l-5,5 l5,5 M6,-8 l5,5 l-5,5" stroke="#F7B79F" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><rect x="-28" y="8" width="56" height="5" rx="2" fill="#888780"/></g></g><circle cx="-25" cy="51" r="4.6" fill="#F0997B" stroke="#D5684A" stroke-width="2"/><circle cx="25" cy="51" r="4.6" fill="#F0997B" stroke="#D5684A" stroke-width="2"/></g></svg><small>Kai</small></span><span class="face"><svg xmlns="http://www.w3.org/2000/svg" viewBox="-62 -62 124 124" aria-hidden="true" focusable="false"><g><path d="M-12,33 L-13,50" stroke="#D99A2B" stroke-width="4.6" stroke-linecap="round"/><ellipse cx="-15" cy="52" rx="6.5" ry="3.8" fill="#412402" stroke="#D99A2B" stroke-width="2"/><path d="M12,33 L13,50" stroke="#D99A2B" stroke-width="4.6" stroke-linecap="round"/><ellipse cx="15" cy="52" rx="6.5" ry="3.8" fill="#412402" stroke="#D99A2B" stroke-width="2"/><path d="M-24.41025641025641,17 Q-36.41025641025641,22 -38.41025641025641,31" stroke="#D99A2B" stroke-width="4.6" fill="none" stroke-linecap="round"/><path d="M24.41025641025641,17 Q44.705128205128204,19.5 55,26" stroke="#D99A2B" stroke-width="4.6" fill="none" stroke-linecap="round"/><path data-piny-part="outline" d="M-26.9,-30.3 Q-22,-39 -12.0,-39.0 L12.0,-39.0 Q22,-39 26.9,-30.3 L39.1,-8.7 Q44,0 39.1,8.7 L26.9,30.3 Q22,39 12.0,39.0 L-12.0,39.0 Q-22,39 -26.9,30.3 L-39.1,8.7 Q-44,0 -39.1,-8.7 Z" fill="#FAC775" stroke="#D99A2B" stroke-width="3.2" stroke-linejoin="round"/><ellipse cx="-20" cy="11" rx="5" ry="3" fill="#F06F8B" opacity=".28"/><ellipse cx="20" cy="11" rx="5" ry="3" fill="#F06F8B" opacity=".28"/></g><g><ellipse cx="-13" cy="-7" rx="7.5" ry="7.50" fill="#fff"/><circle cx="-11.5" cy="-6" r="3.80" fill="#2C2C2A"/><circle cx="-10.2" cy="-7.6" r="1.2" fill="#fff"/><ellipse cx="13" cy="-7" rx="7.5" ry="7.50" fill="#fff"/><circle cx="14.5" cy="-6" r="3.80" fill="#2C2C2A"/><circle cx="15.8" cy="-7.6" r="1.2" fill="#fff"/></g><g><path d="M-8.00,13 Q0,18.00 8.00,13" stroke="#412402" stroke-width="2.8" fill="none" stroke-linecap="round"/></g><g><g class="piny-prop piny-prop-glass"><g transform="translate(44,14)"><circle cx="0" cy="0" r="10" fill="#E6F1FB" fill-opacity=".85" stroke="#5F5E5A" stroke-width="3"/><path d="M7,7 L16,17" stroke="#5F5E5A" stroke-width="4.4" stroke-linecap="round"/></g></g><circle cx="-38.41025641025641" cy="31" r="4.6" fill="#FAC775" stroke="#D99A2B" stroke-width="2"/><circle cx="55" cy="26" r="4.6" fill="#FAC775" stroke="#D99A2B" stroke-width="2"/></g></svg><small>Lee</small></span><span class="face"><svg xmlns="http://www.w3.org/2000/svg" viewBox="-62 -62 124 124" aria-hidden="true" focusable="false"><g><path d="M-12,28 L-13,45" stroke="#378ADD" stroke-width="4.6" stroke-linecap="round"/><ellipse cx="-15" cy="47" rx="6.5" ry="3.8" fill="#042C53" stroke="#378ADD" stroke-width="2"/><path d="M12,28 L13,45" stroke="#378ADD" stroke-width="4.6" stroke-linecap="round"/><ellipse cx="15" cy="47" rx="6.5" ry="3.8" fill="#042C53" stroke="#378ADD" stroke-width="2"/><path d="M-19,17 Q-31,22 -33,31" stroke="#378ADD" stroke-width="4.6" fill="none" stroke-linecap="round"/><path d="M19,17 Q31,22 33,31" stroke="#378ADD" stroke-width="4.6" fill="none" stroke-linecap="round"/><path data-piny-part="outline" d="M-11.3,-36.7 Q0,-48 11.3,-36.7 L36.7,-11.3 Q48,0 36.7,11.3 L11.3,36.7 Q0,48 -11.3,36.7 L-36.7,11.3 Q-48,0 -36.7,-11.3 Z" fill="#B5D4F4" stroke="#378ADD" stroke-width="3.2" stroke-linejoin="round"/><ellipse cx="-19" cy="11" rx="5" ry="3" fill="#F06F8B" opacity=".28"/><ellipse cx="19" cy="11" rx="5" ry="3" fill="#F06F8B" opacity=".28"/></g><g><ellipse cx="-12" cy="-6" rx="7.5" ry="7.50" fill="#fff"/><circle cx="-10.5" cy="-5" r="3.80" fill="#2C2C2A"/><circle cx="-9.2" cy="-6.6" r="1.2" fill="#fff"/><ellipse cx="12" cy="-6" rx="7.5" ry="7.50" fill="#fff"/><circle cx="13.5" cy="-5" r="3.80" fill="#2C2C2A"/><circle cx="14.8" cy="-6.6" r="1.2" fill="#fff"/></g><g><path d="M-8.00,13 Q0,18.00 8.00,13" stroke="#042C53" stroke-width="2.8" fill="none" stroke-linecap="round"/></g><g><g class="piny-prop piny-prop-bulb"><g transform="translate(40,-26)"><path d="M0,-13 C-8,-13 -12,-7 -12,-2 C-12,3 -8,6 -6,9 L6,9 C8,6 12,3 12,-2 C12,-7 8,-13 0,-13 Z" fill="#FAEEDA" stroke="#5F5E5A" stroke-width="1.8" stroke-linejoin="round"/><rect x="-5" y="10" width="10" height="5" rx="1.5" fill="#5F5E5A"/><path d="M-3,3 L0,-3 L3,3" stroke="#BA7517" stroke-width="1.7" fill="none" stroke-linecap="round" stroke-linejoin="round"/></g></g><circle cx="-33" cy="31" r="4.6" fill="#B5D4F4" stroke="#378ADD" stroke-width="2"/><circle cx="33" cy="31" r="4.6" fill="#B5D4F4" stroke="#378ADD" stroke-width="2"/></g></svg><small>Ren</small></span></div>
+  <div class="bubble">We made these!</div>
+</section>
+<main>
+  <section class="work"><div class="wrap">
+    <div class="intro"><h2 class="reveal">The work</h2><p class="reveal">Real sites in production, on EmDash, kept up by people. Open one to see its record.</p></div>
+    <div class="grid">
+      <a class="card reveal" href="/work"><div class="pic"><div class="still-card"><span>Saltwater</span></div></div><div class="text"><span class="stub">SITE Nº 01</span><div class="kind">Publication · EmDash</div><h3>Saltwater</h3><p>Sydney's coastal walks, walked, timed and written up.</p><div class="record"><span>5 Pinies</span><span>Model on the record</span><span>Steps by hand on the record</span></div></div></a>
+      <a class="card reveal" href="#"><div class="pic"><div class="still-card"><span>Brew Guide</span></div></div><div class="text"><span class="stub">SITE Nº 02</span><div class="kind">Docs · EmDash</div><h3>Brew Guide</h3><p>Better coffee at home, one method at a time.</p><div class="record"><span>5 Pinies</span><span>Model on the record</span><span>Steps by hand on the record</span></div></div></a>
+    </div>
+  </div></section>
+  <section class="how"><div class="wrap">
+    <h2 class="reveal">How we work</h2>
+    <ol>
+      <li class="reveal"><span class="face"><svg xmlns="http://www.w3.org/2000/svg" viewBox="-62 -62 124 124" aria-hidden="true" focusable="false"><g><path d="M-12,33 L-13,50" stroke="#7D73D9" stroke-width="4.6" stroke-linecap="round"/><ellipse cx="-15" cy="52" rx="6.5" ry="3.8" fill="#26215C" stroke="#7D73D9" stroke-width="2"/><path d="M12,33 L13,50" stroke="#7D73D9" stroke-width="4.6" stroke-linecap="round"/><ellipse cx="15" cy="52" rx="6.5" ry="3.8" fill="#26215C" stroke="#7D73D9" stroke-width="2"/><path d="M-27.309516212355263,17 Q-39.30951621235526,22 -41.30951621235526,31" stroke="#7D73D9" stroke-width="4.6" fill="none" stroke-linecap="round"/><path d="M27.309516212355263,17 Q35.15475810617763,20 33,27" stroke="#7D73D9" stroke-width="4.6" fill="none" stroke-linecap="round"/><path data-piny-part="outline" d="M0,-41 A41,41 0 1 1 0,41 A41,41 0 1 1 0,-41 Z" fill="#AFA9EC" stroke="#7D73D9" stroke-width="3.2" stroke-linejoin="round"/><ellipse cx="-20" cy="11" rx="5" ry="3" fill="#F06F8B" opacity=".28"/><ellipse cx="20" cy="11" rx="5" ry="3" fill="#F06F8B" opacity=".28"/></g><g><ellipse cx="-13" cy="-7" rx="7.5" ry="7.50" fill="#fff"/><circle cx="-11.5" cy="-6" r="3.80" fill="#2C2C2A"/><circle cx="-10.2" cy="-7.6" r="1.2" fill="#fff"/><ellipse cx="13" cy="-7" rx="7.5" ry="7.50" fill="#fff"/><circle cx="14.5" cy="-6" r="3.80" fill="#2C2C2A"/><circle cx="15.8" cy="-7.6" r="1.2" fill="#fff"/></g><g><path d="M-8.00,13 Q0,18.00 8.00,13" stroke="#26215C" stroke-width="2.8" fill="none" stroke-linecap="round"/></g><g><g class="piny-prop piny-prop-roadmap"><g transform="translate(34,14) rotate(8)"><rect x="0" y="0" width="30" height="23" rx="3" fill="#F7F5EE" stroke="#5F5E5A" stroke-width="1.6"/><path d="M5,18 C10,18 9,9 15,10 C21,11 22,5 25,5" stroke="#534AB7" stroke-width="2" fill="none" stroke-linecap="round"/><circle cx="5" cy="18" r="2" fill="#534AB7"/><circle cx="25" cy="5" r="2.4" fill="#E2533F"/></g></g><circle cx="-41.30951621235526" cy="31" r="4.6" fill="#AFA9EC" stroke="#7D73D9" stroke-width="2"/><circle cx="33" cy="27" r="4.6" fill="#AFA9EC" stroke="#7D73D9" stroke-width="2"/></g></svg></span><b>Sam draws it</b><p>The look, from your brief, on phone and desktop.</p></li>
+      <li class="reveal"><span class="face"><svg xmlns="http://www.w3.org/2000/svg" viewBox="-62 -62 124 124" aria-hidden="true" focusable="false"><g><path d="M-12,33 L-13,50" stroke="#45B08D" stroke-width="4.6" stroke-linecap="round"/><ellipse cx="-15" cy="52" rx="6.5" ry="3.8" fill="#04342C" stroke="#45B08D" stroke-width="2"/><path d="M12,33 L13,50" stroke="#45B08D" stroke-width="4.6" stroke-linecap="round"/><ellipse cx="15" cy="52" rx="6.5" ry="3.8" fill="#04342C" stroke="#45B08D" stroke-width="2"/><path d="M-29,17 Q-41,22 -43,31" stroke="#45B08D" stroke-width="4.6" fill="none" stroke-linecap="round"/><path d="M29,17 Q42,21.5 45,30" stroke="#45B08D" stroke-width="4.6" fill="none" stroke-linecap="round"/><path data-piny-part="outline" d="M-39.0,-22.0 Q-39,-39 -22.0,-39.0 L22.0,-39.0 Q39,-39 39.0,-22.0 L39.0,22.0 Q39,39 22.0,39.0 L-22.0,39.0 Q-39,39 -39.0,22.0 Z" fill="#9FE1CB" stroke="#45B08D" stroke-width="3.2" stroke-linejoin="round"/><ellipse cx="-20" cy="11" rx="5" ry="3" fill="#F06F8B" opacity=".28"/><ellipse cx="20" cy="11" rx="5" ry="3" fill="#F06F8B" opacity=".28"/></g><g><ellipse cx="-13" cy="-7" rx="7.5" ry="7.50" fill="#fff"/><circle cx="-11.5" cy="-6" r="3.80" fill="#2C2C2A"/><circle cx="-10.2" cy="-7.6" r="1.2" fill="#fff"/><ellipse cx="13" cy="-7" rx="7.5" ry="7.50" fill="#fff"/><circle cx="14.5" cy="-6" r="3.80" fill="#2C2C2A"/><circle cx="15.8" cy="-7.6" r="1.2" fill="#fff"/></g><g><path d="M-8.00,13 Q0,18.00 8.00,13" stroke="#04342C" stroke-width="2.8" fill="none" stroke-linecap="round"/></g><g><g class="piny-prop piny-prop-stopwatch"><g transform="translate(46,16)"><rect x="-3" y="-15" width="6" height="5" rx="1" fill="#5F5E5A"/><circle cx="0" cy="0" r="12" fill="#F7F5EE" stroke="#5F5E5A" stroke-width="2"/><path d="M0,0 L0,-7 M0,0 L5,3" stroke="#0F6E56" stroke-width="2.2" stroke-linecap="round"/></g></g><circle cx="-43" cy="31" r="4.6" fill="#9FE1CB" stroke="#45B08D" stroke-width="2"/><circle cx="45" cy="30" r="4.6" fill="#9FE1CB" stroke="#45B08D" stroke-width="2"/></g></svg></span><b>Ana and Kai build it</b><p>On EmDash, with the content in the seed.</p></li>
+      <li class="reveal"><span class="face"><svg xmlns="http://www.w3.org/2000/svg" viewBox="-62 -62 124 124" aria-hidden="true" focusable="false"><g><path d="M-12,33 L-13,50" stroke="#D99A2B" stroke-width="4.6" stroke-linecap="round"/><ellipse cx="-15" cy="52" rx="6.5" ry="3.8" fill="#412402" stroke="#D99A2B" stroke-width="2"/><path d="M12,33 L13,50" stroke="#D99A2B" stroke-width="4.6" stroke-linecap="round"/><ellipse cx="15" cy="52" rx="6.5" ry="3.8" fill="#412402" stroke="#D99A2B" stroke-width="2"/><path d="M-24.41025641025641,17 Q-36.41025641025641,22 -38.41025641025641,31" stroke="#D99A2B" stroke-width="4.6" fill="none" stroke-linecap="round"/><path d="M24.41025641025641,17 Q44.705128205128204,19.5 55,26" stroke="#D99A2B" stroke-width="4.6" fill="none" stroke-linecap="round"/><path data-piny-part="outline" d="M-26.9,-30.3 Q-22,-39 -12.0,-39.0 L12.0,-39.0 Q22,-39 26.9,-30.3 L39.1,-8.7 Q44,0 39.1,8.7 L26.9,30.3 Q22,39 12.0,39.0 L-12.0,39.0 Q-22,39 -26.9,30.3 L-39.1,8.7 Q-44,0 -39.1,-8.7 Z" fill="#FAC775" stroke="#D99A2B" stroke-width="3.2" stroke-linejoin="round"/><ellipse cx="-20" cy="11" rx="5" ry="3" fill="#F06F8B" opacity=".28"/><ellipse cx="20" cy="11" rx="5" ry="3" fill="#F06F8B" opacity=".28"/></g><g><ellipse cx="-13" cy="-7" rx="7.5" ry="7.50" fill="#fff"/><circle cx="-11.5" cy="-6" r="3.80" fill="#2C2C2A"/><circle cx="-10.2" cy="-7.6" r="1.2" fill="#fff"/><ellipse cx="13" cy="-7" rx="7.5" ry="7.50" fill="#fff"/><circle cx="14.5" cy="-6" r="3.80" fill="#2C2C2A"/><circle cx="15.8" cy="-7.6" r="1.2" fill="#fff"/></g><g><path d="M-8.00,13 Q0,18.00 8.00,13" stroke="#412402" stroke-width="2.8" fill="none" stroke-linecap="round"/></g><g><g class="piny-prop piny-prop-glass"><g transform="translate(44,14)"><circle cx="0" cy="0" r="10" fill="#E6F1FB" fill-opacity=".85" stroke="#5F5E5A" stroke-width="3"/><path d="M7,7 L16,17" stroke="#5F5E5A" stroke-width="4.4" stroke-linecap="round"/></g></g><circle cx="-38.41025641025641" cy="31" r="4.6" fill="#FAC775" stroke="#D99A2B" stroke-width="2"/><circle cx="55" cy="26" r="4.6" fill="#FAC775" stroke="#D99A2B" stroke-width="2"/></g></svg></span><b>Lee checks it</b><p>Every page measured on a phone before it is public.</p></li>
+      <li class="reveal"><span class="face"><svg xmlns="http://www.w3.org/2000/svg" viewBox="-62 -62 124 124" aria-hidden="true" focusable="false"><g><path d="M-12,28 L-13,45" stroke="#378ADD" stroke-width="4.6" stroke-linecap="round"/><ellipse cx="-15" cy="47" rx="6.5" ry="3.8" fill="#042C53" stroke="#378ADD" stroke-width="2"/><path d="M12,28 L13,45" stroke="#378ADD" stroke-width="4.6" stroke-linecap="round"/><ellipse cx="15" cy="47" rx="6.5" ry="3.8" fill="#042C53" stroke="#378ADD" stroke-width="2"/><path d="M-19,17 Q-31,22 -33,31" stroke="#378ADD" stroke-width="4.6" fill="none" stroke-linecap="round"/><path d="M19,17 Q31,22 33,31" stroke="#378ADD" stroke-width="4.6" fill="none" stroke-linecap="round"/><path data-piny-part="outline" d="M-11.3,-36.7 Q0,-48 11.3,-36.7 L36.7,-11.3 Q48,0 36.7,11.3 L11.3,36.7 Q0,48 -11.3,36.7 L-36.7,11.3 Q-48,0 -36.7,-11.3 Z" fill="#B5D4F4" stroke="#378ADD" stroke-width="3.2" stroke-linejoin="round"/><ellipse cx="-19" cy="11" rx="5" ry="3" fill="#F06F8B" opacity=".28"/><ellipse cx="19" cy="11" rx="5" ry="3" fill="#F06F8B" opacity=".28"/></g><g><ellipse cx="-12" cy="-6" rx="7.5" ry="7.50" fill="#fff"/><circle cx="-10.5" cy="-5" r="3.80" fill="#2C2C2A"/><circle cx="-9.2" cy="-6.6" r="1.2" fill="#fff"/><ellipse cx="12" cy="-6" rx="7.5" ry="7.50" fill="#fff"/><circle cx="13.5" cy="-5" r="3.80" fill="#2C2C2A"/><circle cx="14.8" cy="-6.6" r="1.2" fill="#fff"/></g><g><path d="M-8.00,13 Q0,18.00 8.00,13" stroke="#042C53" stroke-width="2.8" fill="none" stroke-linecap="round"/></g><g><g class="piny-prop piny-prop-bulb"><g transform="translate(40,-26)"><path d="M0,-13 C-8,-13 -12,-7 -12,-2 C-12,3 -8,6 -6,9 L6,9 C8,6 12,3 12,-2 C12,-7 8,-13 0,-13 Z" fill="#FAEEDA" stroke="#5F5E5A" stroke-width="1.8" stroke-linejoin="round"/><rect x="-5" y="10" width="10" height="5" rx="1.5" fill="#5F5E5A"/><path d="M-3,3 L0,-3 L3,3" stroke="#BA7517" stroke-width="1.7" fill="none" stroke-linecap="round" stroke-linejoin="round"/></g></g><circle cx="-33" cy="31" r="4.6" fill="#B5D4F4" stroke="#378ADD" stroke-width="2"/><circle cx="33" cy="31" r="4.6" fill="#B5D4F4" stroke="#378ADD" stroke-width="2"/></g></svg></span><b>Ren reviews it</b><p>And writes down what a person did by hand.</p></li>
+    </ol>
+  </div></section>
+</main>
+<script is:inline>
+// The Pinies' entrance: when a row of them comes into view, they play the next of the public site's four, in order,
+// remembered in this browser, never random. Reduced motion, no storage or no script: the Pinies simply stand there.
+(() => {
+  const order = ['walk', 'skid', 'drop', 'peek'];
+  const still = matchMedia('(prefers-reduced-motion: reduce)').matches || document.documentElement.classList.contains('still');
+  for (const row of document.querySelectorAll('.pinies')) {
+    row.querySelectorAll('.face').forEach((face, i) => face.style.setProperty('--i', String(i)));
+    if (still || !('IntersectionObserver' in window)) { row.dataset.shown = ''; continue; }
+    const seen = new IntersectionObserver(entries => {
+      if (!entries.some(entry => entry.isIntersecting)) return;
+      seen.disconnect();
+      let next = 0;
+      try { next = (Number(localStorage.getItem('tm06-entrance-next')) || 0) % order.length; localStorage.setItem('tm06-entrance-next', String(next + 1)); } catch {}
+      row.dataset.entrance = row.dataset.play || order[next];
+      setTimeout(() => { row.dataset.shown = ''; delete row.dataset.entrance; }, 2600);
+    }, { threshold: 0.6 });
+    seen.observe(row);
+  }
+})();
+
+// A hero's loop: the poster shows first; the clip loads and plays only with motion allowed and the page visible.
+(() => {
+  const still = matchMedia('(prefers-reduced-motion: reduce)').matches || document.documentElement.classList.contains('still');
+  for (const video of document.querySelectorAll('video[data-src]')) {
+    if (still) continue;
+    video.src = video.dataset.src;
+    video.play().catch(() => {});
+  }
+})();
+</script>
+</body>
+</html>

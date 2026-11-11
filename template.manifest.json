@@ -1,0 +1,15 @@
+{
+  "name": "The Pinies' studio",
+  "line": "An illustrated EmDash portfolio: a studio's team, its work as ticket stubs, and each piece's record.",
+  "kind": "emdash",
+  "category": "portfolio",
+  "stacks": [
+    "astro",
+    "emdash"
+  ],
+  "status": "preview",
+  "demo": null,
+  "preview": null,
+  "licence": "MIT",
+  "basedOn": "EmDash portfolio-cloudflare template, 1.4.0 (MIT, Cloudflare)"
+}
