@@ -17,6 +17,17 @@ const seo = getSeoMeta(page, {
 	path: "/about",
 	defaultDescription: "Learn more about who we are and what we do.",
 });
+
+// Sample wording: replace it with your studio's own.
+const sample = {
+	makes: [
+		"Illustrated sites",
+		"Builds on EmDash",
+		"Every page checked on a phone",
+		"A record of who did what",
+	],
+	email: "hello@thepinies.example",
+};
 ---
 
 <Base
@@ -28,14 +39,16 @@ const seo = getSeoMeta(page, {
 	robots={seo.robots}
 	content={{ collection: "pages", id: page.data.id, slug: "about" }}
 >
-	<div class="about-page">
-		<header class="about-header">
-			<h1 class="about-title" {...page.edit.title}>
+	<div
+		class="wrap grid grid-cols-sidebar grid-rows-sidebar gap-x-24 gap-y-12 py-16 max-md:grid-cols-1 max-md:pt-12"
+	>
+		<header class="col-span-full">
+			<h1 class="text-title max-md:text-title-sm" {...page.edit.title}>
 				{page.data.title}
 			</h1>
 		</header>
 
-		<div class="about-content" {...page.edit.content}>
+		<div class="prose-record prose-lead" {...page.edit.content}>
 			{
 				page.data.content ? (
 					<PortableText value={page.data.content} />
@@ -45,147 +58,23 @@ const seo = getSeoMeta(page, {
 			}
 		</div>
 
-		<aside class="about-sidebar">
-			<div class="sidebar-section">
-				<h3>Services</h3>
-				<ul>
-					<li>Brand Identity</li>
-					<li>Web Design & Development</li>
-					<li>Print Design</li>
-					<li>Photography & Art Direction</li>
+		<aside class="sticky top-8 grid gap-5 self-start max-md:static">
+			<div class="tile">
+				<h3 class="mb-2 text-xl">What we make</h3>
+				<ul class="text-md text-neutral-500 dark:text-neutral-300">
+					{sample.makes.map((item) => <li class="mb-1">{item}</li>)}
 				</ul>
 			</div>
 
-			<div class="sidebar-section">
-				<h3>Contact</h3>
-				<p>
-					<a href="mailto:hello@studio.example">hello@studio.example</a>
+			<div class="tile">
+				<h3 class="mb-2 text-xl">Contact</h3>
+				<p class="mb-1 text-md text-neutral-500 dark:text-neutral-300">
+					<a class="sidebar-link" href={`mailto:${sample.email}`}>{sample.email}</a>
 				</p>
-				<p>
-					<a href="/contact">Send us a message →</a>
+				<p class="mb-1 text-md text-neutral-500 dark:text-neutral-300">
+					<a class="sidebar-link" href="/contact">Send us a message →</a>
 				</p>
 			</div>
 		</aside>
 	</div>
 </Base>
-
-<style>
-	.about-page {
-		max-width: var(--wide-width);
-		margin: 0 auto;
-		padding: var(--spacing-2xl) var(--spacing-lg) var(--spacing-4xl);
-		display: grid;
-		grid-template-columns: 2fr 1fr;
-		grid-template-rows: auto 1fr;
-		gap: var(--spacing-4xl);
-	}
-
-	.about-header {
-		grid-column: 1 / -1;
-	}
-
-	.about-title {
-		font-family: var(--font-heading);
-		font-size: var(--font-size-4xl);
-		font-weight: var(--font-weight-display);
-		line-height: var(--leading-tight);
-	}
-
-	.about-content {
-		font-size: var(--font-size-base);
-		line-height: var(--leading-relaxed);
-	}
-
-	.about-content :global(p) {
-		margin-bottom: 1.5em;
-	}
-
-	.about-content :global(h2) {
-		font-family: var(--font-heading);
-		font-size: var(--font-size-2xl);
-		font-weight: var(--font-weight-heading);
-		margin-top: 2.5em;
-		margin-bottom: 0.75em;
-	}
-
-	.about-content :global(h3) {
-		font-family: var(--font-heading);
-		font-size: var(--font-size-xl);
-		font-weight: var(--font-weight-heading);
-		margin-top: 2em;
-		margin-bottom: 0.5em;
-	}
-
-	.about-sidebar {
-		position: sticky;
-		top: var(--spacing-xl);
-		align-self: start;
-	}
-
-	.sidebar-section {
-		margin-bottom: var(--spacing-2xl);
-	}
-
-	.sidebar-section h3 {
-		font-family: var(--font-heading);
-		font-size: var(--font-size-lg);
-		font-weight: var(--font-weight-heading);
-		margin-bottom: var(--spacing-md);
-	}
-
-	.sidebar-section ul {
-		list-style: none;
-		font-size: var(--font-size-sm);
-		color: var(--color-muted);
-	}
-
-	.sidebar-section li {
-		margin-bottom: var(--spacing-sm);
-	}
-
-	.sidebar-section p {
-		font-size: var(--font-size-sm);
-		color: var(--color-muted);
-		margin-bottom: var(--spacing-sm);
-	}
-
-	.sidebar-section a {
-		color: var(--color-text);
-		text-decoration: none;
-		transition: color var(--transition-fast);
-	}
-
-	.sidebar-section a:hover {
-		color: var(--color-brand);
-	}
-
-	@media (max-width: 768px) {
-		.about-page {
-			grid-template-columns: 1fr;
-			gap: var(--spacing-2xl);
-		}
-
-		.about-title {
-			font-size: var(--font-size-3xl);
-		}
-
-		.about-sidebar {
-			position: static;
-			display: grid;
-			grid-template-columns: repeat(2, 1fr);
-			gap: var(--spacing-xl);
-			padding-top: var(--spacing-xl);
-			border-top: 1px solid var(--color-border);
-		}
-
-		.sidebar-section {
-			margin-bottom: 0;
-		}
-	}
-
-	@media (max-width: 480px) {
-		.about-sidebar {
-			grid-template-columns: 1fr;
-		}
-	}
-</style>

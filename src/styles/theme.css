@@ -1,28 +1,181 @@
 /*
-  theme.css -- your theme overrides. This is the file to edit to
-  retheme the site.
+  theme.css -- the design tokens of the Pinies' studio: the one file to edit to retheme the site. Tailwind turns each
+  token into its utilities (--color-primary-700 gives text-primary-700, bg-primary-700 and so on), and
+  src/styles/global.css imports this file right after Tailwind. The markup uses only these tokens.
 
-  Every design token lives in src/styles/tokens.css (colors, type
-  scale, spacing, layout) with its default value. Override any of them
-  here: declarations in this file are unlayered, so they always beat
-  the @layer base defaults in tokens.css.
+  Colours are four scales, 50 to 950, built around the studio's own colours; each scale's plain name is its key colour.
+    primary    teal: links, kind lines and emphasis (700 in daylight, 300 at dusk), and the daylight sky (100)
+    secondary  the hills and the footer's ground
+    tertiary   dusk: the sky's warm band (50), the path (100), the sun (300, 200 at dusk), coral (500) for the mark's
+               dot and the ticket stubs, and the night (800 to 950)
+    neutral    paper to ink: the page (50, 950 at dusk), words (900, 100 at dusk), muted words (500, 300 at dusk),
+               lines (200, 700 at dusk) and cards (white, 800 at dusk)
+  Dark mode is the dusk scheme: the markup pairs each colour with a dark: step, and the dark: variant follows the
+  footer's theme switcher and, without a choice, the system (src/styles/global.css).
 
-  Colors are defined with light-dark(). Overriding with a plain color
-  changes light and dark mode at once; use light-dark(<light>, <dark>)
-  to set different values per mode.
-
-  The serif display face (--font-heading) is loaded in astro.config.mjs.
-  Swap the loaded font there; use overrides here for system fonts or to
-  change the quiet system-sans body face (--font-body).
-
-  Example:
-
-  :root {
-    --color-brand: light-dark(#0f766e, #2dd4bf);
-    --font-body: "Avenir Next", system-ui, sans-serif;
-    --font-size-4xl: 4rem;
-  }
+  The faces, Nunito (--font-sans) and Fredoka (--font-display), are loaded by the Google Fonts link in
+  src/layouts/Base.astro and src/pages/index.astro; to swap one, change that link and the token here.
 */
 
-:root {
+@theme static {
+	/* Colours */
+	--color-*: initial;
+	--color-white: #ffffff;
+
+	--color-primary-50: #e8f7f9;
+	--color-primary-100: #bfe8ef;
+	--color-primary-200: #8fd8e2;
+	--color-primary-300: #5cc8d4;
+	--color-primary-400: #2fadbb;
+	--color-primary-500: #1494a3;
+	--color-primary-600: #0d808e;
+	--color-primary-700: #0a6f7b;
+	--color-primary-800: #0b5761;
+	--color-primary-900: #0c3f47;
+	--color-primary-950: #072a30;
+	--color-primary: #0a6f7b;
+
+	--color-secondary-50: #eef8f2;
+	--color-secondary-100: #d2eedf;
+	--color-secondary-200: #9fd6b9;
+	--color-secondary-300: #7fc6a5;
+	--color-secondary-400: #5fb592;
+	--color-secondary-500: #46a081;
+	--color-secondary-600: #2f8a6f;
+	--color-secondary-700: #28735f;
+	--color-secondary-800: #2b4f53;
+	--color-secondary-900: #1f3d40;
+	--color-secondary-950: #142b2d;
+	--color-secondary: #2f8a6f;
+
+	--color-tertiary-50: #ffe2b8;
+	--color-tertiary-100: #f5d9a8;
+	--color-tertiary-200: #ffd38a;
+	--color-tertiary-300: #ffb648;
+	--color-tertiary-400: #f79a55;
+	--color-tertiary-500: #ef7b62;
+	--color-tertiary-600: #d4604f;
+	--color-tertiary-700: #9a4a4a;
+	--color-tertiary-800: #4a3d2c;
+	--color-tertiary-900: #4a2d52;
+	--color-tertiary-950: #1d1b3d;
+	--color-tertiary: #ef7b62;
+
+	--color-neutral-50: #fff7ec;
+	--color-neutral-100: #f4effa;
+	--color-neutral-200: #eadfce;
+	--color-neutral-300: #aaa2b6;
+	--color-neutral-400: #847c90;
+	--color-neutral-500: #5e5768;
+	--color-neutral-600: #453f50;
+	--color-neutral-700: #2c2639;
+	--color-neutral-800: #1c1826;
+	--color-neutral-900: #17131f;
+	--color-neutral-950: #120f1a;
+	--color-neutral: #17131f;
+
+	/* Faces */
+	--font-sans: "Nunito", system-ui, sans-serif;
+	--font-display: "Fredoka", system-ui, sans-serif;
+
+	/* Type scale. A size without its own line height takes its parent's. */
+	--text-*: initial;
+	--text-2xs: 0.6875rem; /* 11px: the Pinies' names on a phone */
+	--text-xs: 0.8125rem; /* 13px: stubs, kind lines, chips */
+	--text-sm: 0.9375rem; /* 15px: navigation */
+	--text-md: 1rem; /* 16px: small cards */
+	--text-base: 1.0625rem; /* 17px: card copy */
+	--text-intro: 1.125rem; /* 18px: section intros */
+	--text-prose: 1.1875rem; /* 19px: long-form records */
+	--text-lg: 1.3125rem; /* 21px: page intros */
+	--text-xl: 1.5rem; /* 24px: small headings */
+	--text-xl--letter-spacing: -0.02em;
+	--text-mark: 1.625rem; /* 26px: the site's name */
+	--text-mark--letter-spacing: -0.03em;
+	--text-mark-sm: 1.375rem;
+	--text-mark-sm--letter-spacing: -0.03em;
+	--text-still: 2.125rem; /* 34px: a card's name where it has no picture */
+	--text-heading-sm: 2rem; /* 32px: card titles on a phone */
+	--text-heading-sm--line-height: 1.1;
+	--text-heading-sm--letter-spacing: -0.015em;
+	--text-heading: 2.5rem; /* 40px: card titles */
+	--text-heading--line-height: 1.1;
+	--text-heading--letter-spacing: -0.015em;
+	--text-title-sm: 3rem; /* 48px: section titles, page titles on a phone */
+	--text-title-sm--line-height: 0.95;
+	--text-title-sm--letter-spacing: -0.025em;
+	--text-title: 4.75rem; /* 76px: page titles */
+	--text-title--line-height: 0.95;
+	--text-title--letter-spacing: -0.025em;
+	--text-hero-sm: 3.75rem; /* 60px: the home's title on a phone */
+	--text-hero-sm--line-height: 0.9;
+	--text-hero-sm--letter-spacing: -0.025em;
+	--text-hero: 6.25rem; /* 100px: the home's title */
+	--text-hero--line-height: 0.9;
+	--text-hero--letter-spacing: -0.025em;
+	--text-stamp-sm: 4.5rem; /* 72px: the 404 stamp on a phone */
+	--text-stamp-sm--line-height: 1;
+	--text-stamp-sm--letter-spacing: 0.04em;
+	--text-stamp: 7rem; /* 112px: the 404 stamp */
+	--text-stamp--line-height: 1;
+	--text-stamp--letter-spacing: 0.04em;
+	--text-glyph: 1.1em; /* a symbol beside a word */
+
+	--leading-*: initial;
+	--leading-tight: 0.95; /* titles */
+	--leading-snug: 1.1; /* headings */
+	--leading-quote: 1.35; /* pull quotes */
+	--leading-normal: 1.5; /* body copy */
+	--leading-relaxed: 1.65; /* long-form content */
+	--leading-natural: normal; /* the face's own spacing, as on the home */
+
+	--tracking-*: initial;
+	--tracking-tight: -0.02em; /* headings */
+	--tracking-wide: 0.08em; /* uppercase kind lines */
+	--tracking-stub: 0.12em; /* ticket stubs */
+
+	/* Spacing: steps of 4px (p-4 is 16px), and the page's side gutter */
+	--spacing: 0.25rem;
+	--spacing-gutter: clamp(1.125rem, 4vw, 2.5rem); /* 18px on a phone, 40px on a desktop */
+
+	/* Widths and heights */
+	--container-*: initial;
+	--container-intro: 26.25rem; /* 420px */
+	--container-hero-copy: 32.5rem; /* 520px */
+	--container-lede: 38.75rem; /* 620px */
+	--container-reading: 47.5rem; /* 760px: the reading column */
+	--container-heading: 55rem; /* 880px */
+	--container-hero: 56.25rem; /* 900px */
+	--container-record: 67.5rem; /* 1080px: a project's record */
+	--container-page: 80rem; /* 1280px: the page */
+	--min-height-main: calc(100vh - 360px); /* keeps the footer down on a short page */
+
+	/* Layout */
+	--breakpoint-xs: 30rem; /* 480px */
+	--breakpoint-md: 48rem; /* 768px: a phone below, a desktop above */
+	--grid-template-columns-sidebar: 2fr 1fr;
+	--grid-template-rows-sidebar: auto 1fr;
+	--aspect-ticket: 16 / 10;
+
+	/* Corners */
+	--radius-*: initial;
+	--radius-stub: 8px; /* the ticket stub */
+	--radius-soft: 22px; /* pictures, quotes and the speech bubble */
+	--radius-tile: 26px; /* small cards */
+	--radius-stamp: 28px; /* the 404 stamp */
+	--radius-card: 30px; /* ticket cards */
+	--radius-pill: 999px; /* buttons and chips */
+
+	/* Shadows */
+	--shadow-*: initial;
+	--shadow-lift: 0 30px 70px -36px rgb(0 0 0 / 0.45); /* a card lifted on hover */
+	--shadow-picture: 0 30px 70px -40px rgb(0 0 0 / 0.35); /* a record's picture */
+	--shadow-bubble: 0 14px 30px -18px rgb(0 0 0 / 0.4); /* the speech bubble */
+
+	/* Motion */
+	--ease-glide: cubic-bezier(0.2, 0.8, 0.2, 1); /* buttons and reveals */
+	--ease-spring: cubic-bezier(0.3, 1.6, 0.5, 1); /* the cards' springy tilt */
+	--ease-bounce: cubic-bezier(0.3, 1.8, 0.5, 1); /* the Pinies' hop */
+	--ease-pop: cubic-bezier(0.2, 1.6, 0.4, 1); /* the speech bubble */
+	--default-transition-timing-function: ease;
 }

@@ -1,0 +1,838 @@
+/*
+  global.css -- the site's one stylesheet, imported by src/layouts/Base.astro and src/pages/index.astro. The design
+  tokens live in src/styles/theme.css; the markup styles itself with Tailwind's utilities on those tokens. This file
+  adds the dark variant, the elements' defaults, and the few patterns that utilities cannot express cleanly or that
+  repeat: the illustrated scene, the ticket card, pills and chips, motion, and EmDash's Portable Text prose.
+*/
+
+@import "tailwindcss";
+@import "./theme.css";
+
+/*
+  Dark mode is the dusk scheme. The footer's theme switcher puts .dark or .light on <html>; without either, the
+  system's preference decides.
+*/
+@custom-variant dark {
+	&:where(.dark, .dark *) {
+		@slot;
+	}
+	@media (prefers-color-scheme: dark) {
+		&:where(:root:not(.light), :root:not(.light) *) {
+			@slot;
+		}
+	}
+}
+
+/* Page changes: the browser's cross-document view transition. */
+@view-transition {
+	navigation: auto;
+}
+
+@media (prefers-reduced-motion: reduce) {
+	@view-transition {
+		navigation: none;
+	}
+}
+
+@layer base {
+	:root {
+		/* The illustration's colours, read from the theme's scales: daylight, and dusk under dark. */
+		--page: var(--color-neutral-50);
+		--sky-1: var(--color-primary-100);
+		--sky-2: var(--color-tertiary-50);
+		--sun: var(--color-tertiary-300);
+		--cloud: --alpha(var(--color-white) / 75%);
+		--bubble: var(--color-white);
+
+		@variant dark {
+			--page: var(--color-neutral-950);
+			--sky-1: var(--color-tertiary-950);
+			--sky-2: var(--color-tertiary-900);
+			--sun: var(--color-tertiary-200);
+			--cloud: --alpha(var(--color-white) / 12%);
+			--bubble: var(--color-neutral-800);
+		}
+	}
+
+	html {
+		@apply bg-neutral-50 dark:bg-neutral-950;
+	}
+
+	body {
+		@apply overflow-x-clip bg-neutral-50 text-neutral-900 antialiased dark:bg-neutral-950 dark:text-neutral-100;
+	}
+
+	/* Headings: Fredoka, bold and close-set. Each heading sets its own size. */
+	h1,
+	h2,
+	h3,
+	h4 {
+		@apply font-display font-bold;
+		line-height: var(--leading-snug);
+		letter-spacing: var(--tracking-tight);
+	}
+
+	:focus-visible {
+		@apply outline-3 outline-offset-3 outline-primary-700 dark:outline-primary-300;
+	}
+
+	/* Still: reduced motion, and the stills a screenshot renders with html.still. */
+	@media (prefers-reduced-motion: reduce) {
+		*,
+		*::before,
+		*::after {
+			animation: none !important;
+			transition: none !important;
+		}
+
+		.pinies .face {
+			opacity: 1 !important;
+		}
+	}
+
+	html.still *,
+	html.still *::before,
+	html.still *::after {
+		animation: none !important;
+		transition: none !important;
+	}
+
+	html.still .pinies .face {
+		opacity: 1 !important;
+	}
+}
+
+@layer components {
+	/* Layout */
+	.wrap {
+		@apply mx-auto max-w-page px-gutter;
+	}
+
+	.mark {
+		@apply font-display text-mark font-bold whitespace-nowrap lowercase;
+
+		& i {
+			@apply text-tertiary-500 not-italic;
+		}
+	}
+
+	.nav-link {
+		@apply text-neutral-900 decoration-tertiary-500 decoration-2 underline-offset-6 hover:underline dark:text-neutral-100;
+	}
+
+	/* The footer's theme switcher, light words on the ground; the pressed choice is filled. */
+	.theme-btn {
+		@apply cursor-pointer rounded-pill border-2 border-neutral-50/40 bg-transparent px-3 py-1.25 text-xs leading-natural font-bold text-neutral-50 transition-colors hover:border-neutral-50 focus-visible:outline-neutral-50 aria-pressed:border-neutral-50 aria-pressed:bg-neutral-50 aria-pressed:text-secondary-700 dark:border-neutral-100/40 dark:text-neutral-100 dark:hover:border-neutral-100 dark:focus-visible:outline-neutral-100 dark:aria-pressed:border-neutral-100 dark:aria-pressed:bg-neutral-100 dark:aria-pressed:text-secondary-950;
+	}
+
+	/* Pills and chips */
+	.pill {
+		@apply inline-block rounded-pill px-4.5 py-2.5 text-sm font-semibold transition duration-250 ease-glide hover:-translate-y-0.5;
+	}
+
+	.pill-dark {
+		@apply bg-neutral-900 text-neutral-50 dark:bg-neutral-100 dark:text-neutral-950;
+	}
+
+	.pill-outline {
+		@apply border-2 border-neutral-200 text-neutral-900 hover:border-neutral-900 dark:border-neutral-700 dark:text-neutral-100 dark:hover:border-neutral-100;
+	}
+
+	.tag-pill {
+		@apply inline-flex items-center gap-1 rounded-pill border border-neutral-200 bg-white px-3.5 py-1.5 text-xs font-bold text-neutral-900 transition duration-250 ease-glide hover:-translate-y-0.5 hover:border-neutral-900 dark:border-neutral-700 dark:bg-neutral-800 dark:text-neutral-100 dark:hover:border-neutral-100;
+	}
+
+	.tag-pill-active {
+		@apply border-neutral-900 bg-neutral-900 text-neutral-50 dark:border-neutral-100 dark:bg-neutral-100 dark:text-neutral-950;
+	}
+
+	.tag-pill-clear {
+		@apply bg-transparent text-neutral-500 dark:bg-transparent dark:text-neutral-300;
+	}
+
+	.chip {
+		@apply rounded-pill border border-neutral-200 bg-neutral-50 px-3 py-1.5 text-xs font-semibold dark:border-neutral-700 dark:bg-neutral-950;
+	}
+
+	.kind-line {
+		@apply text-xs font-bold tracking-wide text-primary-700 uppercase dark:text-primary-300;
+	}
+
+	.sidebar-link {
+		@apply font-bold text-primary-700 underline-offset-3 hover:underline dark:text-primary-300;
+	}
+
+	/* The small card of "How we work" and the about page's sidebar. */
+	.tile {
+		@apply rounded-tile border border-neutral-200 bg-white p-6 dark:border-neutral-700 dark:bg-neutral-800;
+		transition: transform 0.4s var(--ease-spring);
+	}
+
+	/*
+	  The ticket card: a picture, a dashed tear line with a notch on each side, a coral stub stamped on the corner, and
+	  a springy tilt on hover that leans left and right in turn (.tilt marks the list item that takes turns).
+	*/
+	.ticket {
+		@apply overflow-hidden rounded-card border border-neutral-200 bg-white dark:border-neutral-700 dark:bg-neutral-800;
+		transition:
+			transform 0.5s var(--ease-spring),
+			box-shadow 0.4s;
+
+		&:hover,
+		&:focus-visible {
+			@apply shadow-lift;
+		}
+	}
+
+	.ticket-pic {
+		@apply aspect-ticket overflow-hidden border-b border-neutral-200 dark:border-neutral-700;
+	}
+
+	.ticket-still {
+		@apply grid h-full place-items-center bg-linear-135/srgb from-primary-100 to-tertiary-50 font-display text-still font-bold text-neutral-900 dark:from-tertiary-950 dark:to-tertiary-900 dark:text-neutral-100;
+	}
+
+	.ticket-tear {
+		@apply relative border-t-2 border-dashed border-neutral-200 px-6.5 pt-5.5 pb-6.5 dark:border-neutral-700;
+
+		&::before,
+		&::after {
+			content: "";
+			position: absolute;
+			top: -14px;
+			width: 26px;
+			height: 26px;
+			border-radius: 50%;
+			background: var(--page);
+		}
+
+		&::before {
+			left: -14px;
+		}
+
+		&::after {
+			right: -14px;
+		}
+	}
+
+	.ticket-stub {
+		@apply absolute top-5.5 right-6 rotate-4 rounded-stub border-2 border-tertiary-500 px-2 py-0.75 font-display text-xs font-semibold tracking-stub text-tertiary-500;
+	}
+
+	/* A ticket with its notches cut into the sides, halfway down. */
+	.ticket-notched {
+		@apply relative overflow-hidden;
+
+		&::before,
+		&::after {
+			content: "";
+			position: absolute;
+			top: calc(50% - 13px);
+			width: 26px;
+			height: 26px;
+			border-radius: 50%;
+			background: var(--page);
+		}
+
+		&::before {
+			left: -14px;
+		}
+
+		&::after {
+			right: -14px;
+		}
+	}
+
+	/* EmDash's Portable Text: the record's prose, in Nunito, with Fredoka headings. */
+	.prose-record {
+		@apply max-w-reading text-prose leading-relaxed max-md:text-base;
+
+		& p {
+			margin-bottom: 1.25em;
+		}
+
+		& h2 {
+			font-size: var(--text-heading);
+			margin-top: 1.75em;
+			margin-bottom: 0.4em;
+
+			@variant max-md {
+				font-size: var(--text-heading-sm);
+			}
+		}
+
+		& h3 {
+			font-size: var(--text-xl);
+			margin-top: 1.5em;
+			margin-bottom: 0.4em;
+		}
+
+		& a {
+			@apply text-primary-700 underline underline-offset-3 dark:text-primary-300;
+		}
+
+		& blockquote {
+			@apply rounded-soft border border-s-6 border-neutral-200 border-s-primary-700 bg-white px-8 py-6 font-display leading-quote dark:border-neutral-700 dark:border-s-primary-300 dark:bg-neutral-800;
+			margin: 2em 0;
+			font-size: var(--text-xl);
+		}
+
+		& ul,
+		& ol {
+			margin-bottom: 1.25em;
+			padding-inline-start: 1.25em;
+		}
+
+		& ul {
+			list-style: disc;
+		}
+
+		& ol {
+			list-style: decimal;
+		}
+
+		& :is(ul, ol) ul {
+			list-style: circle;
+		}
+
+		& li {
+			margin-bottom: 0.5em;
+		}
+
+		& li::marker {
+			color: var(--color-tertiary-500);
+		}
+
+		& img {
+			margin: 2em 0;
+			border-radius: var(--radius-soft);
+		}
+	}
+
+	/* The about page opens with a larger, quieter paragraph. */
+	.prose-lead p:first-child {
+		@apply text-lg text-neutral-500 dark:text-neutral-300;
+	}
+
+	/* The site's sky, sun and cloud: a short band behind each inner page's header and title. */
+	.page-sky {
+		position: absolute;
+		inset: 0 0 auto;
+		height: 520px;
+		z-index: -1;
+		overflow: hidden;
+		background: linear-gradient(180deg, var(--sky-1), var(--sky-2) 55%, var(--page));
+
+		& .sun {
+			position: absolute;
+			top: 96px;
+			right: 12%;
+			width: 150px;
+			height: 150px;
+			border-radius: 50%;
+			background: var(--sun);
+			box-shadow: 0 0 90px 30px color-mix(in srgb, var(--sun) 40%, transparent);
+		}
+
+		& .cloud {
+			position: absolute;
+			top: 210px;
+			left: 58%;
+			width: 150px;
+			height: 40px;
+			border-radius: var(--radius-pill);
+			background: var(--cloud);
+			animation: drift-sky 46s linear infinite;
+
+			&::before,
+			&::after {
+				content: "";
+				position: absolute;
+				border-radius: 50%;
+				background: inherit;
+			}
+
+			&::before {
+				width: 52px;
+				height: 52px;
+				left: 22%;
+				top: -24px;
+			}
+
+			&::after {
+				width: 38px;
+				height: 38px;
+				left: 52%;
+				top: -16px;
+			}
+		}
+
+		@variant max-md {
+			height: 440px;
+
+			& .sun {
+				width: 96px;
+				height: 96px;
+				top: 84px;
+				right: 6%;
+			}
+
+			& .cloud {
+				display: none;
+			}
+		}
+	}
+
+	@keyframes drift-sky {
+		50% {
+			transform: translateX(70px);
+		}
+	}
+
+	/* The home's illustrated studio: sky, sun, clouds and three hills, with the Pinies standing on the near one. */
+	.scene {
+		position: relative;
+		height: 860px;
+		overflow: hidden;
+		isolation: isolate;
+		background: linear-gradient(180deg, var(--sky-1), var(--sky-2) 70%);
+
+		& .sun {
+			position: absolute;
+			top: 120px;
+			right: 14%;
+			width: 260px;
+			height: 260px;
+			border-radius: 50%;
+			background: var(--sun);
+			box-shadow: 0 0 120px 40px color-mix(in srgb, var(--sun) 45%, transparent);
+		}
+
+		& .cloud {
+			position: absolute;
+			height: 46px;
+			border-radius: var(--radius-pill);
+			background: var(--cloud);
+
+			&::before,
+			&::after {
+				content: "";
+				position: absolute;
+				border-radius: 50%;
+				background: inherit;
+			}
+
+			&::before {
+				width: 60px;
+				height: 60px;
+				left: 22%;
+				top: -28px;
+			}
+
+			&::after {
+				width: 44px;
+				height: 44px;
+				left: 52%;
+				top: -18px;
+			}
+		}
+
+		& .c1 {
+			width: 180px;
+			left: 64%;
+			top: 330px;
+			animation: drift 38s linear infinite;
+		}
+
+		& .c2 {
+			width: 130px;
+			left: 46%;
+			top: 110px;
+			animation: drift 52s linear infinite reverse;
+		}
+
+		& .hills {
+			position: absolute;
+			left: 0;
+			width: 100%;
+			height: auto;
+		}
+
+		& .far {
+			bottom: 230px;
+		}
+
+		& .mid {
+			bottom: 120px;
+		}
+
+		& .near {
+			bottom: -2px;
+		}
+
+		& .pinies {
+			position: absolute;
+			right: 7%;
+			bottom: 70px;
+			z-index: 2;
+			display: flex;
+			gap: 14px;
+		}
+
+		@variant max-md {
+			height: 780px;
+
+			& .sun {
+				width: 150px;
+				height: 150px;
+				top: 90px;
+				right: 6%;
+			}
+
+			& .pinies {
+				gap: 2px;
+				bottom: 60px;
+				right: 50%;
+				transform: translateX(50%);
+			}
+		}
+	}
+
+	@keyframes drift {
+		50% {
+			transform: translateX(80px);
+		}
+	}
+
+	/* Scroll-driven parallax: the far hills, the middle hills and the sun sink at their own speeds. */
+	@supports (animation-timeline: scroll()) {
+		.scene .far {
+			animation: p-far linear both;
+			animation-timeline: scroll(root);
+			animation-range: 0 100vh;
+		}
+
+		.scene .mid {
+			animation: p-mid linear both;
+			animation-timeline: scroll(root);
+			animation-range: 0 100vh;
+		}
+
+		.scene .sun {
+			animation: p-sun linear both;
+			animation-timeline: scroll(root);
+			animation-range: 0 100vh;
+		}
+	}
+
+	@keyframes p-far {
+		to {
+			transform: translateY(120px);
+		}
+	}
+
+	@keyframes p-mid {
+		to {
+			transform: translateY(60px);
+		}
+	}
+
+	@keyframes p-sun {
+		to {
+			transform: translateY(220px) scale(0.9);
+		}
+	}
+
+	/* The Pinies: a face hops when it is pointed at, and in the hero each wears its name. */
+	.face {
+		transition: transform 0.4s var(--ease-bounce);
+
+		& svg {
+			width: 100%;
+			height: 100%;
+		}
+	}
+
+	@media (prefers-reduced-motion: no-preference) {
+		.pinies .face:hover,
+		.tile:hover .face {
+			transform: translateY(-14px) rotate(-6deg);
+		}
+
+		.tile:hover {
+			transform: rotate(-1deg);
+		}
+
+		.tilt:nth-child(odd) .ticket:is(:hover, :focus-visible),
+		.ticket.tilt:nth-child(odd):is(:hover, :focus-visible) {
+			transform: rotate(-2deg) translateY(-8px) scale(1.01);
+		}
+
+		.tilt:nth-child(even) .ticket:is(:hover, :focus-visible),
+		.ticket.tilt:nth-child(even):is(:hover, :focus-visible) {
+			transform: rotate(2deg) translateY(-8px) scale(1.01);
+		}
+	}
+
+	.pinies .face {
+		position: relative;
+		width: 120px;
+		height: 120px;
+
+		& small {
+			@apply absolute -bottom-6 left-1/2 -translate-x-1/2 rounded-pill bg-white px-2.25 py-0.5 text-xs font-bold text-neutral-900 dark:bg-neutral-800 dark:text-neutral-100;
+		}
+
+		@variant max-md {
+			width: 68px;
+			height: 68px;
+
+			& small {
+				@apply -bottom-4.5 px-1.5 py-px text-2xs;
+			}
+		}
+	}
+
+	/* The Pinies' entrances, the public site's four, played once when their row comes into view. */
+	.pinies[data-entrance] .face {
+		animation-duration: 0.9s;
+		animation-fill-mode: both;
+		animation-delay: calc(var(--i) * 0.14s);
+		animation-timing-function: cubic-bezier(0.3, 0.7, 0.3, 1);
+	}
+
+	.pinies[data-entrance="walk"] .face {
+		animation-name: walk;
+	}
+
+	.pinies[data-entrance="skid"] .face {
+		animation-name: skid;
+	}
+
+	.pinies[data-entrance="drop"] .face {
+		animation-name: drop;
+		animation-timing-function: ease-in;
+	}
+
+	.pinies[data-entrance="peek"] .face {
+		animation-name: peek;
+	}
+
+	.pinies[data-entrance="peek"] .face:last-child {
+		animation-name: peek, wave;
+		animation-duration: 0.9s, 0.6s;
+		animation-delay: calc(4 * 0.14s), 1.5s;
+		animation-fill-mode: both, none;
+	}
+
+	.pinies:not([data-entrance]):not([data-shown]) .face {
+		opacity: 0;
+	}
+
+	@keyframes walk {
+		0% {
+			transform: translateX(-120px);
+			opacity: 0;
+		}
+		12% {
+			opacity: 1;
+		}
+		20% {
+			transform: translateX(-96px) translateY(-4px);
+		}
+		35% {
+			transform: translateX(-70px) translateY(0);
+		}
+		50% {
+			transform: translateX(-44px) translateY(-4px);
+		}
+		65% {
+			transform: translateX(-16px) translateY(0);
+		}
+		80% {
+			transform: translateX(0) translateY(-16px);
+		}
+		100% {
+			transform: translateX(0) translateY(0);
+		}
+	}
+
+	@keyframes skid {
+		0% {
+			transform: translateX(520px) rotate(0);
+			opacity: 0;
+		}
+		15% {
+			opacity: 1;
+		}
+		65% {
+			transform: translateX(-8px) rotate(-12deg);
+		}
+		82% {
+			transform: translateX(3px) rotate(3deg);
+		}
+		100% {
+			transform: translateX(0) rotate(0);
+		}
+	}
+
+	@keyframes drop {
+		0% {
+			transform: translateY(-120px);
+			opacity: 0;
+		}
+		15% {
+			opacity: 1;
+		}
+		60% {
+			transform: translateY(0);
+		}
+		75% {
+			transform: translateY(-12px);
+		}
+		90% {
+			transform: translateY(0);
+		}
+		95% {
+			transform: translateY(-3px);
+		}
+		100% {
+			transform: translateY(0);
+		}
+	}
+
+	@keyframes peek {
+		0% {
+			transform: translateY(56px);
+			opacity: 0;
+		}
+		20% {
+			opacity: 1;
+		}
+		70% {
+			transform: translateY(-5px);
+		}
+		100% {
+			transform: translateY(0);
+		}
+	}
+
+	@keyframes wave {
+		0%,
+		100% {
+			transform: rotate(0);
+		}
+		25% {
+			transform: rotate(-12deg);
+		}
+		50% {
+			transform: rotate(10deg);
+		}
+		75% {
+			transform: rotate(-6deg);
+		}
+	}
+
+	/* The speech bubble over the Pinies. */
+	.bubble {
+		@apply absolute z-2 rounded-soft px-4.5 py-3.5 text-base font-bold text-neutral-900 shadow-bubble dark:text-neutral-100;
+		right: 9%;
+		bottom: 230px;
+		background: var(--bubble);
+		animation: pop 0.6s var(--ease-pop) 1.6s both;
+
+		&::after {
+			content: "";
+			position: absolute;
+			left: 24px;
+			bottom: -10px;
+			border: 10px solid transparent;
+			border-top-color: var(--bubble);
+			border-bottom: 0;
+		}
+
+		@variant max-md {
+			@apply text-sm;
+			right: 18px;
+			bottom: 170px;
+		}
+	}
+
+	@keyframes pop {
+		from {
+			opacity: 0;
+			transform: scale(0.6) translateY(20px);
+		}
+	}
+
+	/* Motion: the hero's words rise one line after another, then lift away as the page scrolls; sections rise into
+	   view. Reveals move with `translate` and `scale`, so a card's hover `transform` still applies. A browser without
+	   scroll timelines simply shows the page. */
+	.rise {
+		animation: rise 0.9s var(--ease-glide) both;
+		animation-delay: calc(var(--i, 0) * 110ms + 120ms);
+	}
+
+	@keyframes rise {
+		from {
+			opacity: 0;
+			transform: translateY(36px);
+		}
+	}
+
+	@supports (animation-timeline: scroll()) {
+		.lift {
+			animation: lift linear both;
+			animation-timeline: scroll(root);
+			animation-range: 0 70vh;
+		}
+
+		.reveal {
+			animation: reveal linear both;
+			animation-timeline: view();
+			animation-range: entry 0% entry 70%;
+		}
+	}
+
+	@keyframes lift {
+		to {
+			opacity: 0;
+			transform: translateY(-90px);
+		}
+	}
+
+	@keyframes reveal {
+		from {
+			opacity: 0;
+			translate: 0 70px;
+			scale: 0.97;
+		}
+	}
+
+	::view-transition-old(root) {
+		animation: 260ms cubic-bezier(0.4, 0, 1, 1) both vt-out;
+	}
+
+	::view-transition-new(root) {
+		animation: 420ms cubic-bezier(0, 0, 0.2, 1) 80ms both vt-in;
+	}
+
+	::view-transition-group(*) {
+		animation-duration: 520ms;
+		animation-timing-function: var(--ease-glide);
+	}
+
+	@keyframes vt-out {
+		to {
+			opacity: 0;
+			transform: translateY(-12px);
+		}
+	}
+
+	@keyframes vt-in {
+		from {
+			opacity: 0;
+			transform: translateY(24px);
+		}
+	}
+}

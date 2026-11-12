@@ -1,0 +1,16 @@
+---
+// The footer's theme choice, applied in <head> before the first paint so a chosen theme never flashes the other.
+---
+
+<script is:inline>
+	// Apply an explicit theme choice immediately to prevent flash.
+	// With no cookie, the dark: variant follows the OS.
+	(function () {
+		var c = document.cookie;
+		var i = c.indexOf("theme=");
+		var theme = i >= 0 ? c.slice(i + 6).split(";")[0] : null;
+		if (theme === "dark" || theme === "light") {
+			document.documentElement.classList.add(theme);
+		}
+	})();
+</script>

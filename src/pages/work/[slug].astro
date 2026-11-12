@@ -78,35 +78,30 @@ const seo = getSeoMeta(project, {
 	type="article"
 	content={{ collection: "projects", id: project.data.id, slug }}
 >
-	<article class="project">
-		<header class="project-header">
-			<div class="project-meta">
+	<article class="mx-auto max-w-record px-gutter py-16 max-md:pt-12">
+		<header class="mb-12 max-w-heading">
+			<div class="kind-line mb-2">
 				{
 					project.data.client && (
-						<span class="project-client" {...project.edit.client}>
-							{project.data.client}
-						</span>
+						<span {...project.edit.client}>{project.data.client}</span>
 					)
 				}
-				{
-					project.data.client && project.data.year && (
-						<span class="meta-separator">·</span>
-					)
-				}
+				{project.data.client && project.data.year && <span class="mx-1">·</span>}
 				{
 					project.data.year && (
-						<span class="project-year" {...project.edit.year}>
-							{project.data.year}
-						</span>
+						<span {...project.edit.year}>{project.data.year}</span>
 					)
 				}
 			</div>
-			<h1 class="project-title" {...project.edit.title}>
+			<h1 class="mb-6 text-title max-md:text-title-sm" {...project.edit.title}>
 				{project.data.title}
 			</h1>
 			{
 				project.data.summary && (
-					<p class="project-summary" {...project.edit.summary}>
+					<p
+						class="mb-6 max-w-lede text-lg leading-normal text-neutral-500 dark:text-neutral-300"
+						{...project.edit.summary}
+					>
 						{project.data.summary}
 					</p>
 				)
@@ -115,7 +110,7 @@ const seo = getSeoMeta(project, {
 				projectUrl && (
 					<a
 						href={projectUrl}
-						class="project-link"
+						class="pill pill-dark"
 						target="_blank"
 						rel="noopener noreferrer"
 						{...project.edit.url}
@@ -128,23 +123,36 @@ const seo = getSeoMeta(project, {
 
 		{
 			project.data.featured_image && (
-				<div class="featured-image" {...project.edit.featured_image}>
-					<Image image={project.data.featured_image} />
+				<div
+					class="mb-16 overflow-hidden rounded-card border border-neutral-200 bg-white shadow-picture dark:border-neutral-700 dark:bg-neutral-800"
+					{...project.edit.featured_image}
+				>
+					<Image image={project.data.featured_image} class="h-auto w-full max-w-none" />
 				</div>
 			)
 		}
 
-		<div class="project-content" {...project.edit.content}>
+		<div class="prose-record" {...project.edit.content}>
 			<PortableText value={project.data.content} />
 		</div>
 
 		{
 			gallery && gallery.length > 0 && (
-				<div class="project-gallery" {...project.edit.gallery}>
+				<div
+					class="mt-16 grid grid-cols-2 gap-7 max-md:grid-cols-1"
+					{...project.edit.gallery}
+				>
 					{gallery.map((item) => (
-						<figure class="gallery-item">
-							<Image image={item.image} />
-							{item.caption && <figcaption>{item.caption}</figcaption>}
+						<figure>
+							<Image
+								image={item.image}
+								class="h-auto w-full rounded-soft border border-neutral-200 dark:border-neutral-700"
+							/>
+							{item.caption && (
+								<figcaption class="mt-2 text-sm font-semibold text-neutral-500 dark:text-neutral-300">
+									{item.caption}
+								</figcaption>
+							)}
 						</figure>
 					))}
 				</div>
@@ -154,10 +162,12 @@ const seo = getSeoMeta(project, {
 
 	{
 		otherProjects.length > 0 && (
-			<section class="more-projects">
-				<div class="more-inner">
-					<h2 class="more-title">More Work</h2>
-					<div class="more-grid">
+			<section class="border-t-2 border-dashed border-neutral-200 pt-16 pb-8 dark:border-neutral-700">
+				<div class="wrap">
+					<h2 class="mb-8 text-title-sm leading-tight tracking-tight max-md:text-heading">
+						More work
+					</h2>
+					<div class="grid grid-cols-2 gap-7 max-md:grid-cols-1">
 						{otherProjects.map((p) => (
 							<ProjectCard
 								title={p.data.title}
@@ -175,172 +185,3 @@ const seo = getSeoMeta(project, {
 		)
 	}
 </Base>
-
-<style>
-	.project {
-		max-width: var(--max-width);
-		margin: 0 auto;
-		padding: 0 var(--spacing-lg) var(--spacing-4xl);
-	}
-
-	.project-header {
-		margin-bottom: var(--spacing-2xl);
-	}
-
-	.project-meta {
-		font-size: var(--font-size-sm);
-		color: var(--color-muted);
-		margin-bottom: var(--spacing-sm);
-		text-transform: uppercase;
-		letter-spacing: var(--tracking-wide);
-	}
-
-	.meta-separator {
-		margin: 0 var(--spacing-sm);
-	}
-
-	.project-title {
-		font-family: var(--font-heading);
-		font-size: var(--font-size-4xl);
-		font-weight: var(--font-weight-display);
-		line-height: var(--leading-tight);
-		margin-bottom: var(--spacing-lg);
-	}
-
-	.project-summary {
-		font-size: var(--font-size-lg);
-		color: var(--color-muted);
-		line-height: var(--leading-normal);
-		margin-bottom: var(--spacing-lg);
-	}
-
-	.project-link {
-		display: inline-block;
-		font-size: var(--font-size-sm);
-		color: var(--color-brand);
-		text-decoration: none;
-		transition: color var(--transition-fast);
-	}
-
-	.project-link:hover {
-		color: var(--color-text);
-	}
-
-	.featured-image {
-		margin-bottom: var(--spacing-3xl);
-	}
-
-	.featured-image img {
-		width: 100%;
-		height: auto;
-		border-radius: var(--radius);
-	}
-
-	.project-content {
-		font-size: var(--font-size-base);
-		line-height: var(--leading-relaxed);
-	}
-
-	.project-content :global(p) {
-		margin-bottom: 1.5em;
-	}
-
-	.project-content :global(h2) {
-		font-family: var(--font-heading);
-		font-size: var(--font-size-2xl);
-		font-weight: var(--font-weight-heading);
-		margin-top: 2.5em;
-		margin-bottom: 0.75em;
-	}
-
-	.project-content :global(h3) {
-		font-family: var(--font-heading);
-		font-size: var(--font-size-xl);
-		font-weight: var(--font-weight-heading);
-		margin-top: 2em;
-		margin-bottom: 0.5em;
-	}
-
-	.project-content :global(blockquote) {
-		margin: 2em 0;
-		padding-inline-start: var(--spacing-xl);
-		border-inline-start: 2px solid var(--color-brand);
-		color: var(--color-muted);
-		font-family: var(--font-heading);
-		font-style: italic;
-		font-size: var(--font-size-lg);
-	}
-
-	.project-content :global(ul),
-	.project-content :global(ol) {
-		margin-bottom: 1.5em;
-		padding-inline-start: 1.25em;
-	}
-
-	.project-content :global(li) {
-		margin-bottom: 0.5em;
-	}
-
-	.project-content :global(img) {
-		margin: 2em 0;
-		border-radius: var(--radius);
-	}
-
-	.project-gallery {
-		margin-top: var(--spacing-3xl);
-		display: grid;
-		grid-template-columns: repeat(2, 1fr);
-		gap: var(--spacing-lg);
-	}
-
-	.gallery-item img {
-		width: 100%;
-		height: auto;
-		border-radius: var(--radius);
-	}
-
-	.gallery-item figcaption {
-		margin-top: var(--spacing-sm);
-		font-size: var(--font-size-sm);
-		color: var(--color-muted);
-	}
-
-	.more-projects {
-		background: var(--color-surface);
-		padding: var(--spacing-4xl) 0;
-		margin-top: var(--spacing-2xl);
-	}
-
-	.more-inner {
-		max-width: var(--wide-width);
-		margin: 0 auto;
-		padding: 0 var(--spacing-lg);
-	}
-
-	.more-title {
-		font-family: var(--font-heading);
-		font-size: var(--font-size-2xl);
-		font-weight: var(--font-weight-heading);
-		margin-bottom: var(--spacing-2xl);
-	}
-
-	.more-grid {
-		display: grid;
-		grid-template-columns: repeat(2, 1fr);
-		gap: var(--spacing-2xl);
-	}
-
-	@media (max-width: 768px) {
-		.project-title {
-			font-size: var(--font-size-3xl);
-		}
-
-		.project-gallery {
-			grid-template-columns: 1fr;
-		}
-
-		.more-grid {
-			grid-template-columns: 1fr;
-		}
-	}
-</style>

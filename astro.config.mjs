@@ -1,7 +1,8 @@
 import cloudflare from "@astrojs/cloudflare";
 import react from "@astrojs/react";
+import tailwindcss from "@tailwindcss/vite";
 import { d1, r2 } from "@emdash-cms/cloudflare";
-import { defineConfig, fontProviders } from "astro/config";
+import { defineConfig } from "astro/config";
 import emdash from "emdash/astro";
 
 export default defineConfig({
@@ -18,14 +19,8 @@ export default defineConfig({
 			storage: r2({ binding: "MEDIA" }),
 		}),
 	],
-	fonts: [
-		{
-			provider: fontProviders.google(),
-			name: "Playfair Display",
-			cssVariable: "--font-heading",
-			weights: [400, 500, 600, 700],
-			fallbacks: ["serif"],
-		},
-	],
+	vite: {
+		plugins: [tailwindcss()],
+	},
 	devToolbar: { enabled: false },
 });

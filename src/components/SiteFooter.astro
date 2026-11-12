@@ -1,0 +1,147 @@
+---
+// The footer every page shares, the home included: the hills, the site's mark and tagline, the theme switcher, and
+// the line that says who made the site. Its styles are in src/styles/global.css, which every page loads.
+import { getSiteSettingsWithCacheHint } from "emdash";
+
+const settingsResult = await getSiteSettingsWithCacheHint();
+const settings = settingsResult.data;
+if (Astro.cache?.enabled) {
+	Astro.cache.set(settingsResult.cacheHint);
+}
+
+const siteTitle = settings?.title || "Studio";
+const siteLogo = settings?.logo?.url ? settings.logo : null;
+---
+
+<footer class="mt-12 text-base leading-normal text-neutral-50 dark:text-neutral-100">
+	<svg
+		class="-mb-px block h-30 w-full max-md:h-18"
+		viewBox="0 0 1440 160"
+		preserveAspectRatio="none"
+		aria-hidden="true"
+		focusable="false"
+	>
+		<path
+			d="M0 90 C200 40 380 60 560 80 S900 20 1100 50 S1340 90 1440 70 V160 H0Z"
+			class="fill-secondary-200 dark:fill-secondary-800"></path>
+		<path
+			d="M0 112 C240 62 420 132 700 102 S1120 42 1440 96 V160 H0Z"
+			class="fill-secondary-400 dark:fill-secondary-900"></path>
+		<path
+			d="M0 138 C300 98 560 152 820 122 S1240 92 1440 128 V160 H0Z"
+			class="fill-secondary-700 dark:fill-secondary-950"></path>
+	</svg>
+	<div class="bg-secondary-700 pt-8 pb-16 dark:bg-secondary-950">
+		<div
+			class="wrap flex items-start justify-between gap-8 max-md:flex-col max-md:gap-6"
+		>
+			<div>
+				<span class="mark inline-block">
+					{
+						siteLogo ? (
+							<img
+								src={siteLogo.url}
+								alt={siteLogo.alt || siteTitle}
+								class="h-7 w-auto"
+							/>
+						) : (
+							<>
+								{siteTitle}
+								<i aria-hidden="true">.</i>
+							</>
+						)
+					}
+				</span>
+				<p class="mt-1 text-base font-semibold opacity-85">
+					{settings?.tagline || "Design & Development"}
+				</p>
+			</div>
+			<div class="flex flex-col items-end gap-4 max-md:items-start">
+				<div class="flex gap-1">
+					<button
+						type="button"
+						class="theme-btn"
+						data-theme="light"
+						aria-pressed="false"
+						aria-label="Light mode">Light</button
+					>
+					<button
+						type="button"
+						class="theme-btn"
+						data-theme="dark"
+						aria-pressed="false"
+						aria-label="Dark mode">Dark</button
+					>
+					<button
+						type="button"
+						class="theme-btn"
+						data-theme="system"
+						aria-pressed="false"
+						aria-label="System theme">System</button
+					>
+				</div>
+				<p class="text-sm font-semibold opacity-85">
+					Made by the Pinies in <a
+						href="https://piny.studio/home/"
+						class="underline underline-offset-3 focus-visible:outline-neutral-50 dark:focus-visible:outline-neutral-100"
+						><img
+							class="me-1.5 inline-block size-5 align-middle"
+							src="/brand/piny-studio-mark.png"
+							width="20"
+							height="20"
+							alt=""
+						/><span class="font-bold">Piny Studio</span></a
+					>, on <a
+						href="https://emdashcms.com"
+						class="underline underline-offset-3 focus-visible:outline-neutral-50 dark:focus-visible:outline-neutral-100"
+						>EmDash</a
+					>
+				</p>
+			</div>
+		</div>
+	</div>
+</footer>
+
+<script>
+	// Theme switcher: .light or .dark on <html> pins the dark: variant; "system" removes both.
+	const THEME_REGEX = /theme=([^;]+)/;
+	const themeBtns = document.querySelectorAll<HTMLButtonElement>(".theme-btn");
+	const root = document.documentElement;
+
+	function setTheme(theme: string) {
+		if (theme !== "light" && theme !== "dark" && theme !== "system") {
+			theme = "system";
+		}
+		const secure = location.protocol === "https:" ? "; Secure" : "";
+		if (theme === "system") {
+			document.cookie = `theme=; path=/; max-age=0; SameSite=Lax${secure}`;
+			root.classList.remove("light", "dark");
+		} else {
+			document.cookie = `theme=${theme}; path=/; max-age=31536000; SameSite=Lax${secure}`;
+			root.classList.remove("light", "dark");
+			root.classList.add(theme);
+		}
+		updateActiveBtn(theme);
+	}
+
+	function updateActiveBtn(theme: string) {
+		themeBtns.forEach((btn) => {
+			btn.setAttribute("aria-pressed", String(btn.dataset.theme === theme));
+		});
+	}
+
+	function getStoredTheme(): string {
+		const match = document.cookie.match(THEME_REGEX);
+		return match ? match[1] : "system";
+	}
+
+	// Initialize - apply stored theme on load
+	const storedTheme = getStoredTheme();
+	setTheme(storedTheme);
+
+	themeBtns.forEach((btn) => {
+		btn.addEventListener("click", () => {
+			setTheme(btn.dataset.theme || "system");
+		});
+	});
+</script>
