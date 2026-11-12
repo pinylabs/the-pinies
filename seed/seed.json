@@ -2,13 +2,13 @@
 	"$schema": "https://emdashcms.com/seed.schema.json",
 	"version": "1",
 	"meta": {
-		"name": "Portfolio Starter",
-		"description": "A portfolio for showcasing creative work",
-		"author": "EmDash"
+		"name": "The Pinies",
+		"description": "A studio's work, each piece with its brief and the record of who made it",
+		"author": "Piny"
 	},
 	"settings": {
-		"title": "Studio",
-		"tagline": "Design & Development"
+		"title": "The Pinies",
+		"tagline": "Real sites, and how we made them"
 	},
 	"collections": [
 		{
@@ -113,32 +113,12 @@
 			"collections": ["projects"],
 			"terms": [
 				{
-					"slug": "identity",
-					"label": "Identity"
+					"slug": "publication",
+					"label": "Publication"
 				},
 				{
-					"slug": "ui-ux",
-					"label": "UI/UX"
-				},
-				{
-					"slug": "development",
-					"label": "Development"
-				},
-				{
-					"slug": "art-direction",
-					"label": "Art Direction"
-				},
-				{
-					"slug": "packaging",
-					"label": "Packaging"
-				},
-				{
-					"slug": "ecommerce",
-					"label": "E-commerce"
-				},
-				{
-					"slug": "editorial",
-					"label": "Editorial"
+					"slug": "docs",
+					"label": "Docs"
 				}
 			]
 		}
@@ -176,23 +156,11 @@
 							"children": [
 								{
 									"_type": "span",
-									"text": "We are a small design studio focused on creating meaningful work for thoughtful clients. Founded in 2020, we've had the privilege of working with brands across technology, culture, and the arts.",
-									"_key": "k1"
+									"text": "The Pinies are a design and build team that lives in Piny: five of them, each with one job. Every site here comes with its brief, who did what, the model we ran on, and what a person did by hand.",
+									"_key": "a1"
 								}
 							],
-							"_key": "k0"
-						},
-						{
-							"_type": "block",
-							"style": "normal",
-							"children": [
-								{
-									"_type": "span",
-									"text": "Our approach is simple: listen carefully, think deeply, and craft with intention. We believe that good design is invisible — it gets out of the way and lets the work speak for itself.",
-									"_key": "k3"
-								}
-							],
-							"_key": "k2"
+							"_key": "a0"
 						},
 						{
 							"_type": "block",
@@ -200,11 +168,11 @@
 							"children": [
 								{
 									"_type": "span",
-									"text": "What we do",
-									"_key": "k5"
+									"text": "How we work",
+									"_key": "a3"
 								}
 							],
-							"_key": "k4"
+							"_key": "a2"
 						},
 						{
 							"_type": "block",
@@ -212,11 +180,93 @@
 							"children": [
 								{
 									"_type": "span",
-									"text": "We specialize in brand identity, web design, and art direction. Whether you need a complete visual identity or a single website, we bring the same level of care and attention to every project.",
-									"_key": "k7"
+									"text": "Sam draws it: the look, from your brief, on phone and desktop.",
+									"_key": "a5"
 								}
 							],
-							"_key": "k6"
+							"_key": "a4"
+						},
+						{
+							"_type": "block",
+							"style": "normal",
+							"children": [
+								{
+									"_type": "span",
+									"text": "Ana and Kai build it, on EmDash, with the content in the seed.",
+									"_key": "a7"
+								}
+							],
+							"_key": "a6"
+						},
+						{
+							"_type": "block",
+							"style": "normal",
+							"children": [
+								{
+									"_type": "span",
+									"text": "Lee checks it: every page measured on a phone before it is public.",
+									"_key": "a9"
+								}
+							],
+							"_key": "a8"
+						},
+						{
+							"_type": "block",
+							"style": "normal",
+							"children": [
+								{
+									"_type": "span",
+									"text": "Ren reviews it, and writes down what a person did by hand.",
+									"_key": "a11"
+								}
+							],
+							"_key": "a10"
+						},
+						{
+							"_type": "block",
+							"style": "normal",
+							"children": [
+								{
+									"_type": "span",
+									"text": "This page is sample content. Replace it with your own studio's story.",
+									"_key": "a13"
+								}
+							],
+							"_key": "a12"
+						}
+					]
+				}
+			},
+			{
+				"id": "contact",
+				"slug": "contact",
+				"status": "published",
+				"data": {
+					"title": "Contact",
+					"content": [
+						{
+							"_type": "block",
+							"style": "normal",
+							"children": [
+								{
+									"_type": "span",
+									"text": "Work with us in Piny. Tell us what you are making and who it is for, and the Pinies will start from your brief.",
+									"_key": "c1"
+								}
+							],
+							"_key": "c0"
+						},
+						{
+							"_type": "block",
+							"style": "normal",
+							"children": [
+								{
+									"_type": "span",
+									"text": "This page is sample content. Replace it with how people should reach your studio.",
+									"_key": "c3"
+								}
+							],
+							"_key": "c2"
 						}
 					]
 				}
@@ -224,21 +274,22 @@
 		],
 		"projects": [
 			{
-				"id": "meridian-brand",
-				"slug": "meridian-brand",
+				"id": "saltwater",
+				"slug": "saltwater",
 				"status": "published",
 				"data": {
-					"title": "Meridian",
-					"client": "Meridian Collective",
-					"year": "2024",
-					"summary": "A complete brand identity for a creative collective bringing together artists and technologists.",
+					"title": "Saltwater",
+					"client": "Sample record",
+					"year": "2026",
+					"summary": "Sydney's coastal walks, walked, timed and written up.",
 					"featured_image": {
 						"$media": {
-							"url": "https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=1200&h=900&fit=crop",
-							"alt": "Meridian cover image",
-							"filename": "photo-1558618666-fcd25c85cd64.jpg"
+							"url": "https://raw.githubusercontent.com/pinylabs/saltwater/main/.piny/preview.webp",
+							"alt": "Saltwater's home page: a publication of Sydney's coastal walks",
+							"filename": "saltwater-preview.webp"
 						}
 					},
+					"url": "https://github.com/pinylabs/saltwater",
 					"content": [
 						{
 							"_type": "block",
@@ -246,11 +297,11 @@
 							"children": [
 								{
 									"_type": "span",
-									"text": "Meridian Collective needed a visual identity that could bridge the gap between traditional art and emerging technology. The challenge was to create something that felt timeless yet forward-looking.",
-									"_key": "k1"
+									"text": "This is a sample record. It shows the shape of a site's record; replace it with your own studio's work.",
+									"_key": "s1"
 								}
 							],
-							"_key": "k0"
+							"_key": "s0"
 						},
 						{
 							"_type": "block",
@@ -258,11 +309,11 @@
 							"children": [
 								{
 									"_type": "span",
-									"text": "The approach",
-									"_key": "k3"
+									"text": "The brief",
+									"_key": "s3"
 								}
 							],
-							"_key": "k2"
+							"_key": "s2"
 						},
 						{
 							"_type": "block",
@@ -270,11 +321,11 @@
 							"children": [
 								{
 									"_type": "span",
-									"text": "We developed a wordmark that combines classical typography with subtle geometric forms. The color palette draws from both digital interfaces and natural materials, creating a bridge between worlds.",
-									"_key": "k5"
+									"text": "A publication of Sydney's coastal walks: each walk walked, timed and written up, with where it starts, how long it takes and what to bring. Site Nº 01, a publication on EmDash.",
+									"_key": "s5"
 								}
 							],
-							"_key": "k4"
+							"_key": "s4"
 						},
 						{
 							"_type": "block",
@@ -282,11 +333,11 @@
 							"children": [
 								{
 									"_type": "span",
-									"text": "The result",
-									"_key": "k7"
+									"text": "Who did what",
+									"_key": "s7"
 								}
 							],
-							"_key": "k6"
+							"_key": "s6"
 						},
 						{
 							"_type": "block",
@@ -294,57 +345,83 @@
 							"children": [
 								{
 									"_type": "span",
-									"text": "The new identity has been applied across print and digital touchpoints, from business cards to a fully responsive website. Meridian has received positive feedback from both artists and technologists alike.",
-									"_key": "k9"
+									"text": "Sam drew the look from the brief, on phone and desktop. Ana and Kai built it on EmDash, with the walks in the seed. Lee measured every page on a phone before it was public. Ren reviewed it and wrote down what a person did by hand.",
+									"_key": "s9"
 								}
 							],
-							"_key": "k8"
-						}
-					],
-					"gallery": [
-						{
-							"image": {
-								"$media": {
-									"url": "https://images.unsplash.com/photo-1523726491678-bf852e717f6a?w=1200&h=900&fit=crop",
-									"alt": "Brand identity sketches and colour studies arranged on a desk",
-									"filename": "meridian-process.jpg"
-								}
-							},
-							"caption": "Early identity studies for Meridian Collective."
+							"_key": "s8"
 						},
 						{
-							"image": {
-								"$media": {
-									"url": "https://images.unsplash.com/photo-1558655146-d09347e92766?w=1200&h=900&fit=crop",
-									"alt": "Meridian website layouts displayed on a designer's monitor",
-									"filename": "meridian-digital.jpg"
+							"_type": "block",
+							"style": "h2",
+							"children": [
+								{
+									"_type": "span",
+									"text": "The model and the time",
+									"_key": "s11"
 								}
-							},
-							"caption": "The identity applied to Meridian's digital experience."
+							],
+							"_key": "s10"
+						},
+						{
+							"_type": "block",
+							"style": "normal",
+							"children": [
+								{
+									"_type": "span",
+									"text": "A real record names the model the Pinies ran on and how long the work took. This sample leaves both for your own record.",
+									"_key": "s13"
+								}
+							],
+							"_key": "s12"
+						},
+						{
+							"_type": "block",
+							"style": "h2",
+							"children": [
+								{
+									"_type": "span",
+									"text": "What a person did by hand",
+									"_key": "s15"
+								}
+							],
+							"_key": "s14"
+						},
+						{
+							"_type": "block",
+							"style": "normal",
+							"children": [
+								{
+									"_type": "span",
+									"text": "A real record lists each step a person took by hand, such as choosing the photographs or approving the release. This sample leaves the list for your own record.",
+									"_key": "s17"
+								}
+							],
+							"_key": "s16"
 						}
 					]
 				},
 				"taxonomies": {
-					"tag": ["identity", "art-direction"]
+					"tag": ["publication"]
 				}
 			},
 			{
-				"id": "volta-web",
-				"slug": "volta-web",
+				"id": "brew-guide",
+				"slug": "brew-guide",
 				"status": "published",
 				"data": {
-					"title": "Volta",
-					"client": "Volta Energy",
-					"year": "2024",
-					"summary": "Website design for a renewable energy startup making clean power accessible to everyone.",
+					"title": "Brew Guide",
+					"client": "Sample record",
+					"year": "2026",
+					"summary": "Better coffee at home, one method at a time.",
 					"featured_image": {
 						"$media": {
-							"url": "https://images.unsplash.com/photo-1497366216548-37526070297c?w=1200&h=900&fit=crop",
-							"alt": "Volta cover image",
-							"filename": "photo-1497366216548-37526070297c.jpg"
+							"url": "https://raw.githubusercontent.com/pinylabs/brew-guide/main/.piny/preview.webp",
+							"alt": "Brew Guide's home page: docs for brewing better coffee at home",
+							"filename": "brew-guide-preview.webp"
 						}
 					},
-					"url": "https://volta.example.com",
+					"url": "https://github.com/pinylabs/brew-guide",
 					"content": [
 						{
 							"_type": "block",
@@ -352,11 +429,11 @@
 							"children": [
 								{
 									"_type": "span",
-									"text": "Volta is on a mission to make renewable energy accessible to everyone. They needed a website that could explain complex technology simply while inspiring trust in potential customers.",
-									"_key": "k1"
+									"text": "This is a sample record. It shows the shape of a site's record; replace it with your own studio's work.",
+									"_key": "b1"
 								}
 							],
-							"_key": "k0"
+							"_key": "b0"
 						},
 						{
 							"_type": "block",
@@ -364,11 +441,11 @@
 							"children": [
 								{
 									"_type": "span",
-									"text": "Design principles",
-									"_key": "k3"
+									"text": "The brief",
+									"_key": "b3"
 								}
 							],
-							"_key": "k2"
+							"_key": "b2"
 						},
 						{
 							"_type": "block",
@@ -376,46 +453,11 @@
 							"children": [
 								{
 									"_type": "span",
-									"text": "We focused on clarity and warmth. The design uses generous whitespace and a vibrant green accent that evokes growth and sustainability without feeling clichéd.",
-									"_key": "k5"
+									"text": "Docs for better coffee at home, one method at a time: each method with its grind, its ratio and its steps. Site Nº 02, docs on EmDash.",
+									"_key": "b5"
 								}
 							],
-							"_key": "k4"
-						}
-					]
-				},
-				"taxonomies": {
-					"tag": ["ui-ux", "development"]
-				}
-			},
-			{
-				"id": "archive-print",
-				"slug": "archive-print",
-				"status": "published",
-				"data": {
-					"title": "The Archive",
-					"client": "City Museum",
-					"year": "2023",
-					"summary": "Exhibition catalog and print materials for a retrospective on modernist architecture.",
-					"featured_image": {
-						"$media": {
-							"url": "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=1200&h=900&fit=crop",
-							"alt": "The Archive cover image",
-							"filename": "photo-1507003211169-0a1dd7228f2d.jpg"
-						}
-					},
-					"content": [
-						{
-							"_type": "block",
-							"style": "normal",
-							"children": [
-								{
-									"_type": "span",
-									"text": "The Archive was a major exhibition at the City Museum, showcasing 50 years of modernist architecture through photographs, drawings, and models. We designed the complete print identity.",
-									"_key": "k1"
-								}
-							],
-							"_key": "k0"
+							"_key": "b4"
 						},
 						{
 							"_type": "block",
@@ -423,11 +465,11 @@
 							"children": [
 								{
 									"_type": "span",
-									"text": "The catalog",
-									"_key": "k3"
+									"text": "Who did what",
+									"_key": "b7"
 								}
 							],
-							"_key": "k2"
+							"_key": "b6"
 						},
 						{
 							"_type": "block",
@@ -435,46 +477,11 @@
 							"children": [
 								{
 									"_type": "span",
-									"text": "The 240-page catalog uses a strict grid system inspired by the work being exhibited. Full-bleed photography alternates with dense text spreads, creating a rhythm that echoes the exhibition layout.",
-									"_key": "k5"
+									"text": "Sam drew the look from the brief, on phone and desktop. Ana and Kai built it on EmDash, with the methods in the seed. Lee measured every page on a phone before it was public. Ren reviewed it and wrote down what a person did by hand.",
+									"_key": "b9"
 								}
 							],
-							"_key": "k4"
-						}
-					]
-				},
-				"taxonomies": {
-					"tag": ["editorial", "art-direction"]
-				}
-			},
-			{
-				"id": "coastal-photo",
-				"slug": "coastal-photo",
-				"status": "published",
-				"data": {
-					"title": "Coastal",
-					"client": "Personal Project",
-					"year": "2023",
-					"summary": "A photographic study of the Pacific coastline, exploring the intersection of land, sea, and sky.",
-					"featured_image": {
-						"$media": {
-							"url": "https://images.unsplash.com/photo-1505142468610-359e7d316be0?w=1200&h=900&fit=crop",
-							"alt": "Coastal cover image",
-							"filename": "photo-1505142468610-359e7d316be0.jpg"
-						}
-					},
-					"content": [
-						{
-							"_type": "block",
-							"style": "normal",
-							"children": [
-								{
-									"_type": "span",
-									"text": "Coastal began as a weekend project and grew into a year-long exploration of the Pacific shoreline. Shot entirely on medium format film, the series captures the quiet drama of the coast.",
-									"_key": "k1"
-								}
-							],
-							"_key": "k0"
+							"_key": "b8"
 						},
 						{
 							"_type": "block",
@@ -482,11 +489,11 @@
 							"children": [
 								{
 									"_type": "span",
-									"text": "Process",
-									"_key": "k3"
+									"text": "The model and the time",
+									"_key": "b11"
 								}
 							],
-							"_key": "k2"
+							"_key": "b10"
 						},
 						{
 							"_type": "block",
@@ -494,16 +501,40 @@
 							"children": [
 								{
 									"_type": "span",
-									"text": "Each image was made at dawn or dusk, when the light is softest and the beaches are empty. The slow process of shooting film encourages patience and intentionality — qualities that show in the final work.",
-									"_key": "k5"
+									"text": "A real record names the model the Pinies ran on and how long the work took. This sample leaves both for your own record.",
+									"_key": "b13"
 								}
 							],
-							"_key": "k4"
+							"_key": "b12"
+						},
+						{
+							"_type": "block",
+							"style": "h2",
+							"children": [
+								{
+									"_type": "span",
+									"text": "What a person did by hand",
+									"_key": "b15"
+								}
+							],
+							"_key": "b14"
+						},
+						{
+							"_type": "block",
+							"style": "normal",
+							"children": [
+								{
+									"_type": "span",
+									"text": "A real record lists each step a person took by hand, such as checking a recipe or approving the release. This sample leaves the list for your own record.",
+									"_key": "b17"
+								}
+							],
+							"_key": "b16"
 						}
 					]
 				},
 				"taxonomies": {
-					"tag": ["art-direction", "editorial"]
+					"tag": ["docs"]
 				}
 			}
 		]
